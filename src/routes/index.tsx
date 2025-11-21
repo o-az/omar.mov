@@ -30,7 +30,7 @@ const socials = [
 
 function RouteComponent() {
   onMount(() => {
-    PowerGlitch.glitch('.glitch', {playMode: 'hover'})
+    PowerGlitch.glitch('.glitch', { playMode: 'hover' })
   })
 
   return (
@@ -75,8 +75,7 @@ function RouteComponent() {
               popover='auto'
               id='email-popover'
               aria-live='polite'
-              class='fixed opacity-0 left-[anchor(center)] top-[anchor(bottom)] translate-x-[-50%] translate-y-[0.4rem] bg-fuchsia-300 px-1 py-0.5 text-sm text-[#0f0f0f] shadow-[0_10px_30px_rgb(0_0_0/0.35)] [position-anchor:--email-anchor] origin-[top_center] animate-none [:popover-open]:animate-[copy-pop_2s_forwards]'
-              >
+              class='fixed opacity-0 left-[anchor(center)] top-[anchor(bottom)] translate-x-[-50%] translate-y-[0.4rem] bg-fuchsia-300 px-1 py-0.5 text-sm text-[#0f0f0f] shadow-[0_10px_30px_rgb(0_0_0/0.35)] [position-anchor:--email-anchor] origin-[top_center] animate-none [:popover-open]:animate-[copy-pop_2s_forwards]'>
               copied
             </div>
           </li>

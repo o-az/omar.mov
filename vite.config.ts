@@ -38,6 +38,7 @@ export default defineConfig(config => {
       port: Number(env.PORT || randomIntInclusive(3_100, 8_100))
     },
     build: {
+      minify: 'oxc',
       target: 'esnext',
       emptyOutDir: true,
       rolldownOptions: {

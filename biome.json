@@ -120,6 +120,9 @@
     "parser": {
       "tailwindDirectives": true
     },
+    "globals": [
+      "@theme"
+    ],
     "formatter": {
       "enabled": true
     }

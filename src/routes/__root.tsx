@@ -10,13 +10,15 @@ import { DefaultCatchBoundary } from '#components/default-catch-boundary.tsx'
 
 export const Route = createRootRoute({
   head: () => ({
+    title: 'omar.mov',
     meta: [
       { charset: 'utf-8' },
       { name: 'description', content: 'me site' },
       {
         name: 'viewport',
         content: 'width=device-width, initial-scale=1.0, interactive-widget=resizes-content'
-      }
+      },
+      { name: 'robots', content: 'index, follow' }
     ],
     links: [
       { rel: 'stylesheet', href: appCss },
