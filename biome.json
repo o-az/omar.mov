@@ -1,0 +1,158 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.6/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "off"
+      }
+    }
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!_",
+      "src/**",
+      "!node_modules"
+    ],
+    "ignoreUnknown": true
+  },
+  "formatter": {
+    "enabled": true,
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "indentStyle": "space",
+    "bracketSpacing": true,
+
+    "formatWithErrors": true,
+    "attributePosition": "multiline",
+    "includes": [
+      "**",
+      "!_",
+      "!bun.lock"
+    ]
+  },
+  "linter": {
+    "domains": {
+      "solid": "all",
+      "project": "all"
+    },
+    "includes": [
+      "**",
+      "!_",
+      "!bun.lock",
+      "!node_modules"
+    ],
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "noUnusedVariables": "off",
+        "useImportExtensions": "off"
+      },
+      "complexity": {
+        "noBannedTypes": "off",
+        "noStaticOnlyClass": "off",
+        "noUselessConstructor": "off"
+      },
+      "performance": {
+        "noDelete": "off"
+      },
+      "style": {
+        "useTemplate": "off",
+        "noNonNullAssertion": "off",
+        "useNamingConvention": "off",
+        "noUnusedTemplateLiteral": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noEmptyInterface": "off",
+        "noConfusingVoidType": "off",
+        "noAssignInExpressions": "off"
+      }
+    }
+  },
+  "javascript": {
+    "assist": {
+      "enabled": true
+    },
+    "formatter": {
+      "enabled": true,
+      "indentWidth": 2,
+      "lineWidth": 100,
+      "quoteStyle": "single",
+      "indentStyle": "space",
+      "bracketSpacing": true,
+      "bracketSameLine": true,
+      "trailingCommas": "none",
+      "semicolons": "asNeeded",
+      "jsxQuoteStyle": "single",
+      "quoteProperties": "asNeeded",
+      "arrowParentheses": "asNeeded",
+      "attributePosition": "multiline"
+    },
+    "linter": {
+      "enabled": true
+    }
+  },
+  "json": {
+    "linter": {
+      "enabled": true
+    },
+    "parser": {
+      "allowComments": true,
+      "allowTrailingCommas": true
+    },
+    "formatter": {
+      "lineWidth": 1,
+      "enabled": true,
+      "indentStyle": "space"
+    }
+  },
+  "css": {
+    "linter": {
+      "enabled": true
+    },
+    "parser": {
+      "tailwindDirectives": true
+    },
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "*.json",
+        "*.jsonc"
+      ],
+      "formatter": {
+        "lineWidth": 1
+      },
+      "json": {
+        "formatter": {
+          "lineWidth": 1
+        },
+        "parser": {
+          "allowComments": true,
+          "allowTrailingCommas": true
+        }
+      }
+    },
+    {
+      "includes": [
+        "tsconfig.json"
+      ],
+      "json": {
+        "parser": {
+          "allowComments": true,
+          "allowTrailingCommas": true
+        }
+      }
+    }
+  ]
+}

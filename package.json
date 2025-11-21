@@ -1,0 +1,57 @@
+{
+  "name": "omar.mov",
+  "version": "0.0.0",
+  "type": "module",
+  "repository": "github:o-az/omar.mov",
+  "imports": {
+    "#*": "./src/*",
+    "#package.json": "./package.json",
+    "#wrangler.json": "./wrangler.json"
+  },
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "wrangler --config='wrangler.json' deploy",
+    "build:types": "wrangler types --env-interface CloudflareBindings",
+    "check": "biome check . --write --unsafe",
+    "typecheck": "bun tsgo --project tsconfig.json --noEmit",
+    "up": "bun x taze@latest --recursive --update major"
+  },
+  "dependencies": {
+    "@solid-primitives/keyboard": "^1.3.3",
+    "@tanstack/query-async-storage-persister": "^5.90.12",
+    "@tanstack/solid-query": "^5.90.13",
+    "@tanstack/solid-router": "^1.139.0",
+    "@tanstack/solid-start": "^1.139.0",
+    "powerglitch": "^2.5.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.6",
+    "@cloudflare/vite-plugin": "^1.15.2",
+    "@tailwindcss/vite": "^4.1.17",
+    "@tanstack/devtools-vite": "^0.3.11",
+    "@tanstack/solid-query-devtools": "^5.90.4",
+    "@tanstack/solid-query-persist-client": "^5.90.13",
+    "@tanstack/solid-router-devtools": "^1.139.0",
+    "@total-typescript/ts-reset": "^0.6.1",
+    "@types/bun": "^1.3.2",
+    "@types/node": "^24.10.1",
+    "@typescript/native-preview": "^7.0.0-dev.20251120.1",
+    "eruda": "^3.4.3",
+    "solid-js": "^1.9.10",
+    "tailwindcss": "^4.1.17",
+    "tw-animate-css": "^1.4.0",
+    "typed-query-selector": "^2.12.0",
+    "typescript": "^5.9.3",
+    "unplugin-info": "^1.2.4",
+    "vite": "npm:rolldown-vite@latest",
+    "vite-plugin-solid": "^2.11.10",
+    "wrangler": "^4.50.0"
+  },
+  "overrides": {
+    "vite": "npm:rolldown-vite@latest"
+  },
+  "license": "MIT",
+  "packageManager": "bun@1.3.2"
+}

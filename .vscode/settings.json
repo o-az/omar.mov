@@ -1,0 +1,56 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "biomejs.biome",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.preferences.preferTypeOnlyAutoImports": true,
+  "typescript.experimental.useTsgo": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "never"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+  },
+  "files.exclude": {
+    ".wrangler": true
+  },
+  "files.watcherExclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "files.readonlyInclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "files.associations": {
+    ".env.*": "dotenv",
+    "bun.lock": "jsonc",
+    "biome.json": "jsonc",
+    ".vscode/*.json": "jsonc",
+    "*.css": "tailwindcss"
+  },
+  "search.exclude": {
+    "**/_/**": true,
+    "**/dist": true,
+    "bun.lock": true,
+    "**/node_modules": true,
+    "**/routeTree.gen.ts": true
+  }
+}
