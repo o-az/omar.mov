@@ -20,24 +20,24 @@
   },
   "dependencies": {
     "@solid-primitives/keyboard": "^1.3.3",
-    "@tanstack/query-async-storage-persister": "^5.90.12",
-    "@tanstack/solid-query": "^5.90.13",
-    "@tanstack/solid-router": "^1.139.0",
-    "@tanstack/solid-start": "^1.139.0",
+    "@tanstack/query-async-storage-persister": "^5.90.13",
+    "@tanstack/solid-query": "^5.90.14",
+    "@tanstack/solid-router": "^1.139.6",
+    "@tanstack/solid-start": "^1.139.6",
     "powerglitch": "^2.5.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.6",
+    "@biomejs/biome": "^2.3.7",
     "@cloudflare/vite-plugin": "^1.15.2",
     "@tailwindcss/vite": "^4.1.17",
     "@tanstack/devtools-vite": "^0.3.11",
-    "@tanstack/solid-query-devtools": "^5.90.4",
-    "@tanstack/solid-query-persist-client": "^5.90.13",
-    "@tanstack/solid-router-devtools": "^1.139.0",
+    "@tanstack/solid-query-devtools": "^5.91.1",
+    "@tanstack/solid-query-persist-client": "^5.90.14",
+    "@tanstack/solid-router-devtools": "^1.139.6",
     "@total-typescript/ts-reset": "^0.6.1",
-    "@types/bun": "^1.3.2",
+    "@types/bun": "^1.3.3",
     "@types/node": "^24.10.1",
-    "@typescript/native-preview": "^7.0.0-dev.20251121.1",
+    "@typescript/native-preview": "^7.0.0-dev.20251125.1",
     "eruda": "^3.4.3",
     "solid-js": "^1.9.10",
     "tailwindcss": "^4.1.17",
@@ -52,5 +52,5 @@
     "vite": "npm:rolldown-vite@latest"
   },
   "license": "MIT",
-  "packageManager": "bun@1.3.2"
+  "packageManager": "bun@1.3.3"
 }

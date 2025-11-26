@@ -15,7 +15,7 @@ const socials = [
   {
     id: 'x',
     label: '𝕏',
-    url: 'https://x.com/awkroot'
+    url: 'https://x.com/amorfati'
   },
   {
     id: 'bsky',

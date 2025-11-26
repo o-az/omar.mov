@@ -18,7 +18,12 @@ export default defineConfig(config => {
       }
     },
     plugins: [
-      VitePluginTanstackDevtools({ removeDevtoolsOnBuild: true }),
+      VitePluginTanstackDevtools({
+        removeDevtoolsOnBuild: true,
+        eventBusConfig: {
+          port: randomIntInclusive(3_110, 8_110)
+        }
+      }),
       VitePluginInfo({
         cloudflare: true,
         github: 'https://github.com/o-az/omar.mov'
