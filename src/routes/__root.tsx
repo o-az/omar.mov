@@ -4,7 +4,7 @@ import * as Solid from 'solid-js'
 import { HydrationScript } from 'solid-js/web'
 import { Outlet, Scripts, HeadContent, createRootRoute } from '@tanstack/solid-router'
 
-import appCss from '#style.css?url'
+import appCss from '#style/index.css?url'
 import { DevTools, useDevTools } from '#components/dev-tools.tsx'
 import { DefaultCatchBoundary } from '#components/default-catch-boundary.tsx'
 
@@ -48,11 +48,11 @@ function RootDocument({ children }: { children: Solid.JSX.Element }) {
   return (
     <html
       lang='en'
-      class="h-full font-lilex cursor-[url('/icons/cursor.png'),pointer]">
+      class="h-full cursor-[url('/icons/cursor.png'),pointer]">
       <head>
         <HydrationScript />
       </head>
-      <body class='size-full bg-[#121212] p-6 text-white selection:bg-fuchsia-300 selection:text-black flex h-full min-h-screen flex-col overflow-hidden font-[Lilex]'>
+      <body class='size-full bg-[#121212] p-6 text-white selection:bg-fuchsia-300 selection:text-black flex min-h-screen flex-col'>
         <HeadContent />
         {children}
         <DevTools />

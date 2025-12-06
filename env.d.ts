@@ -20,3 +20,8 @@ interface ImportMetaEnv extends Env {}
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+declare module '*.wasm' {
+  const content: string
+  export default content
+}

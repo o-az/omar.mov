@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.6/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -52,7 +52,8 @@
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "off",
-        "useImportExtensions": "off"
+        "useImportExtensions": "off",
+        "noUndeclaredDependencies": "off"
       },
       "complexity": {
         "noBannedTypes": "off",
@@ -66,7 +67,8 @@
         "useTemplate": "off",
         "noNonNullAssertion": "off",
         "useNamingConvention": "off",
-        "noUnusedTemplateLiteral": "off"
+        "noUnusedTemplateLiteral": "off",
+        "noDescendingSpecificity": "off"
       },
       "suspicious": {
         "noExplicitAny": "off",

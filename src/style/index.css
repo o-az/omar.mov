@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "#style/tw.css";
 
 @font-face {
   font-family: "Lilex";
@@ -14,10 +14,6 @@
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;
-}
-
-:root {
-  font-family: "Lilex", sans-serif;
 }
 
 @theme {
@@ -64,7 +60,7 @@ html,
 }
 
 body {
-  font-family: var(--font-display);
+  /* font-family: var(--font-display); */
   @apply text-base;
   min-width: 400px;
 }

@@ -3,9 +3,6 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "*": [
-        "./*"
-      ],
       "#*": [
         "./src/*"
       ]
@@ -41,6 +38,8 @@
     "types": [
       "bun",
       "node",
+      "vite/client",
+      "./node_modules/solid-jsx/types.d.ts",
       "typed-query-selector/strict"
     ]
   },

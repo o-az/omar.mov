@@ -34,7 +34,7 @@ function RouteComponent() {
   })
 
   return (
-    <main class='size-full'>
+    <main class='size-full font-[Lilex]'>
       <h1 class='text-3xl font-bold'>omar aziz</h1>
       <p class='text-lg'>
         software engineer @{' '}

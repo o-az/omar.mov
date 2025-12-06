@@ -1,0 +1,132 @@
+@import "#style/tw.css";
+@import url("http://esm.sh/@shikijs/twoslash/style-rich.css");
+@plugin "@tailwindcss/typography";
+
+h1 {
+  /* margin-bottom: 1.5rem; */
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  /* margin-top: 2rem; */
+  /* padding-bottom: 1.5rem; */
+  letter-spacing: -0.05em;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+li {
+  margin: 0.25rem 0;
+}
+
+a:not([data-element="post-heading"]) {
+  color: #549ff5;
+  text-decoration: none;
+  font-weight: 550;
+  transition: color 0.2s ease-in-out;
+  font-style: italic;
+  &:hover {
+    color: #bae6fd;
+  }
+}
+
+a.mention {
+  color: #549ff5;
+  font-weight: 550;
+  font-style: normal;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: #bae6fd;
+  text-decoration-thickness: 1.2px;
+  &:hover {
+    color: #bae6fd;
+    text-decoration-color: #549ff5;
+  }
+}
+
+hr {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+th,
+td {
+  border: 1px solid #333;
+  padding: 0.5rem 0.75rem;
+}
+
+th {
+  background: #1a1a1a;
+  font-weight: 600;
+}
+
+tr:nth-child(even) {
+  background: #1a1a1a;
+}
+
+h2,
+h3,
+h4,
+h5 {
+  max-width: fit-content;
+}
+
+a[data-element="post-heading"] {
+  text-decoration: none;
+  font-weight: 750;
+  font-style: normal;
+  color: #e6e6e6;
+  transition: color 0.2s ease-in-out;
+  &:hover {
+    color: #f6f6f6;
+  }
+}
+
+/* post-headings should have `# ` in front of them */
+h2,
+h3,
+h4,
+h5,
+h6 {
+  [data-element="post-heading"] {
+    &::before {
+      content: "# ";
+      margin-left: -0.75rem;
+      color: #ffc8fb00;
+      transition: color 0.2s ease-in-out;
+    }
+  }
+  &:hover {
+    [data-element="post-heading"] {
+      &::before {
+        color: #ffc8fb;
+        transition: color 0.2s ease-in-out;
+      }
+    }
+  }
+}
