@@ -1,8 +1,9 @@
 import { For, onMount } from 'solid-js'
 import { PowerGlitch } from 'powerglitch'
-import { createFileRoute } from '@tanstack/solid-router'
+import { createFileRoute, Link } from '@tanstack/solid-router'
 
 export const Route = createFileRoute('/')({
+  ssr: true,
   component: RouteComponent
 })
 
@@ -35,7 +36,14 @@ function RouteComponent() {
 
   return (
     <main class='size-full font-[Lilex]'>
-      <h1 class='text-3xl font-bold'>omar aziz</h1>
+      <header class='flex items-center justify-between'>
+        <h1 class='text-3xl font-bold'>omar aziz</h1>
+        <Link
+          to='/posts'
+          class='text-sm hidden invisible'>
+          writings
+        </Link>
+      </header>
       <p class='text-lg'>
         software engineer @{' '}
         <a

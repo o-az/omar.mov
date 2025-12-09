@@ -1,5 +1,5 @@
-@import "#style/tw.css";
 @import url("http://esm.sh/@shikijs/twoslash/style-rich.css");
+@import "#style/tw.css";
 @plugin "@tailwindcss/typography";
 
 h1 {

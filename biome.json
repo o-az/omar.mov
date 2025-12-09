@@ -6,8 +6,11 @@
     "useIgnoreFile": true
   },
   "assist": {
+    "enabled": true,
     "actions": {
+      "recommended": true,
       "source": {
+        "recommended": true,
         "organizeImports": "off"
       }
     }
@@ -21,13 +24,29 @@
     ],
     "ignoreUnknown": true
   },
+  "html": {
+    "formatter": {
+      "enabled": true,
+      "bracketSameLine": false,
+      "attributePosition": "auto",
+      "indentScriptAndStyle": true,
+      "selfCloseVoidElements": "never"
+    },
+    "linter": {
+      "enabled": true
+    },
+    "assist": {
+      "enabled": true
+    },
+    "experimentalFullSupportEnabled": true
+  },
   "formatter": {
     "enabled": true,
     "indentWidth": 2,
     "lineWidth": 100,
     "indentStyle": "space",
     "bracketSpacing": true,
-
+    "bracketSameLine": false,
     "formatWithErrors": true,
     "attributePosition": "multiline",
     "includes": [
@@ -102,6 +121,9 @@
     }
   },
   "json": {
+    "assist": {
+      "enabled": true
+    },
     "linter": {
       "enabled": true
     },
@@ -116,11 +138,15 @@
     }
   },
   "css": {
+    "assist": {
+      "enabled": true
+    },
     "linter": {
       "enabled": true
     },
     "parser": {
-      "tailwindDirectives": true
+      "tailwindDirectives": true,
+      "allowWrongLineComments": true
     },
     "globals": [
       "@theme"

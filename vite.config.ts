@@ -3,6 +3,7 @@ import NodeProcess from 'node:process'
 import { defineConfig, loadEnv } from 'vite'
 import VitePluginInfo from 'unplugin-info/vite'
 import { default as VitePluginSolid } from 'vite-plugin-solid'
+import VitePluginDevtoolsJson from 'vite-plugin-devtools-json'
 import { default as VitePluginTailwindCSS } from '@tailwindcss/vite'
 import { cloudflare as VitePluginCloudflare } from '@cloudflare/vite-plugin'
 import { devtools as VitePluginTanstackDevtools } from '@tanstack/devtools-vite'
@@ -12,27 +13,27 @@ import rehypeAutolinkHeadings, {
   type Options as RehypeAutolinkHeadingsOptions
 } from 'rehype-autolink-headings'
 import mdx from '@mdx-js/rollup'
-import rehypeSlug from 'rehype-slug'
-import rehypeMeta from 'rehype-meta'
 import stringWidth from 'string-width'
-import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
-import rehypeStringify from 'rehype-stringify'
 import { transformerNotationHighlight } from '@shikijs/transformers'
 import { transformerTwoslash, rendererRich } from '@shikijs/twoslash'
 import rehypeShiki, { type RehypeShikiOptions } from '@shikijs/rehype'
 import remarkGfm, { type Options as RemarkGfmOptions } from 'remark-gfm'
 import { transformerColorizedBrackets } from '@shikijs/colorized-brackets'
-import remarkFrontmatter, { type Options as RemarkFrontmatterOptions } from 'remark-frontmatter'
+import rehypeSlug, { type Options as RehypeSlugOptions } from 'rehype-slug'
+import rehypeMeta, { type Options as RehypeMetaOptions } from 'rehype-meta'
+import remarkParse, { type Options as RemarkParseOptions } from 'remark-parse'
+import remarkRehype, { type Options as RemarkRehypeOptions } from 'remark-rehype'
+import rehypeStringify, { type Options as RehypeStringifyOptions } from 'rehype-stringify'
 import remarkMdxFrontmatter, { type RemarkMdxFrontmatterOptions } from 'remark-mdx-frontmatter'
+import remarkFrontmatter, { type Options as RemarkFrontmatterOptions } from 'remark-frontmatter'
 
 const rollupPluginMdx = () =>
   mdx({
     jsxImportSource: 'solid-jsx',
     rehypePlugins: [
-      rehypeSlug,
-      rehypeMeta,
-      rehypeStringify,
+      [rehypeSlug, {} satisfies RehypeSlugOptions],
+      [rehypeMeta, {} satisfies RehypeMetaOptions],
+      [rehypeStringify, {} satisfies RehypeStringifyOptions],
       [
         rehypeAutolinkHeadings,
         {
@@ -57,11 +58,11 @@ const rollupPluginMdx = () =>
       ]
     ],
     remarkPlugins: [
-      remarkParse,
-      remarkRehype,
-      [remarkGfm, { stringLength: stringWidth } satisfies RemarkGfmOptions],
+      [remarkParse, {} satisfies RemarkParseOptions],
+      [remarkFrontmatter, { type: 'yaml', marker: '-' } satisfies RemarkFrontmatterOptions],
       [remarkMdxFrontmatter, { conflict: 'throw' } satisfies RemarkMdxFrontmatterOptions],
-      [remarkFrontmatter, { type: 'yaml', marker: '-' } satisfies RemarkFrontmatterOptions]
+      [remarkGfm, { stringLength: stringWidth } satisfies RemarkGfmOptions],
+      [remarkRehype, {} satisfies RemarkRehypeOptions]
     ]
   })
 
@@ -71,10 +72,20 @@ export default defineConfig(config => {
   return {
     resolve: {
       alias: {
-        '#': NodePath.resolve(import.meta.dirname, 'src')
+        '#': NodePath.resolve(import.meta.dirname, 'src'),
+        'solid-jsx/jsx-runtime': NodePath.resolve(
+          import.meta.dirname,
+          'src/lib/solid-jsx/jsx-runtime.ts'
+        ),
+        'solid-jsx/jsx-dev-runtime': NodePath.resolve(
+          import.meta.dirname,
+          'src/lib/solid-jsx/jsx-dev-runtime.ts'
+        ),
+        'solid-jsx': NodePath.resolve(import.meta.dirname, 'src/lib/solid-jsx/jsx-runtime.ts')
       }
     },
     plugins: [
+      VitePluginDevtoolsJson(),
       VitePluginTanstackDevtools({
         removeDevtoolsOnBuild: true,
         eventBusConfig: {
@@ -92,27 +103,27 @@ export default defineConfig(config => {
       VitePluginTanstackStart({
         start: { entry: './src/start.ts' },
         server: { entry: './src/server.ts' },
-        client: { entry: './src/client.ts' }
+        client: { entry: './src/client.ts' },
+        router: {
+          experimental: {
+            nonNestedRoutes: true
+          }
+        }
       }),
       rollupPluginMdx(),
       VitePluginSolid({ ssr: true })
     ],
+    optimizeDeps: {
+      exclude: ['solid-jsx'],
+      entries: ['./src/**/*.{ts,tsx}']
+    },
     server: {
       port: Number(env.PORT || randomIntInclusive(3_100, 8_100))
     },
     build: {
-      minify: 'oxc',
+      minify: false,
       target: 'esnext',
-      emptyOutDir: true,
-      rolldownOptions: {
-        output: {
-          cleanDir: true,
-          minify: {
-            compress:
-              config.mode === 'production' ? { dropConsole: true, dropDebugger: true } : undefined
-          }
-        }
-      }
+      emptyOutDir: true
     }
   }
 })

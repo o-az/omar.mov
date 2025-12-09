@@ -10,7 +10,11 @@ import { DefaultCatchBoundary } from '#components/default-catch-boundary.tsx'
 
 export const Route = createRootRoute({
   head: () => ({
+    charset: 'utf-8',
     title: 'omar.mov',
+    description: "how to reach me and see what I'm up to",
+    keywords: 'o-az, amorfati, site, blog, dev',
+
     meta: [
       { charset: 'utf-8' },
       { name: 'description', content: 'me site' },
