@@ -17,22 +17,22 @@ import { Route as PostsPostRouteImport } from './routes/posts/$post'
 const PostsRoute = PostsRouteImport.update({
   id: '/posts',
   path: '/posts',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRouteImport
 } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRouteImport
 } as any)
 const PostsIndexRoute = PostsIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => PostsRoute,
+  getParentRoute: () => PostsRoute
 } as any)
 const PostsPostRoute = PostsPostRouteImport.update({
   id: '/$post',
   path: '/$post',
-  getParentRoute: () => PostsRoute,
+  getParentRoute: () => PostsRoute
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -106,21 +106,20 @@ interface PostsRouteChildren {
 
 const PostsRouteChildren: PostsRouteChildren = {
   PostsPostRoute: PostsPostRoute,
-  PostsIndexRoute: PostsIndexRoute,
+  PostsIndexRoute: PostsIndexRoute
 }
 
 const PostsRouteWithChildren = PostsRoute._addFileChildren(PostsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  PostsRoute: PostsRouteWithChildren,
+  PostsRoute: PostsRouteWithChildren
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/solid-start'
 declare module '@tanstack/solid-start' {
   interface Register {
     ssr: true

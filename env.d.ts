@@ -25,3 +25,9 @@ declare module '*.wasm' {
   const content: string
   export default content
 }
+
+declare module '*.mdx' {
+  const content: string
+  export default content
+  export const components: any
+}

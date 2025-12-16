@@ -40,7 +40,11 @@ function RouteComponent() {
   return (
     <main class='min-h-full'>
       <MDXProvider>
-        <MDXContent components={components} />
+        <MDXContent
+          // biome-ignore lint/suspicious/noTsIgnore: biome is dumb
+          // @ts-ignore - biome is dumb
+          components={components}
+        />
       </MDXProvider>
     </main>
   )
