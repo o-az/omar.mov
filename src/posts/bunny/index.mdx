@@ -1,0 +1,129 @@
+---
+
+title: 'Bunny.net: The Hyperscaler Alternative Worth Knowing'
+date: 2025-12-05
+description: 'A deep dive into Bunny.net — the EU-based edge platform challenging AWS and Cloudflare'
+---
+
+<div class='pt-6 flex flex-col items-center'>
+  <span class='italic font-black text-5xl block'>Bunny<span class='text-[#FA7B27] text-lg tracking-wider'>.net</span></span>
+  <span class='text-lg text-neutral-400 block text-center'>vs</span>
+  <span class='italic font-black text-5xl block text-center'>Cloudflare Workers</span>
+</div>
+
+## Why Bunny?
+
+- Never goes down
+- Based in the EU (Slovenia)
+- Used by big names like [bluesky](https://bsky.app)
+
+## What Does Bunny Offer?
+
+### Edge Scripts
+
+AWS Lambda / Cloudflare Workers equivalent.
+
+- [Deno](https://deno.land) runtime under the hood
+- Built-in editor in the dashboard (with TypeScript support)
+- Native npm module support — no bundling required
+- WASM support out of the box
+
+```ts
+import * as BunnySDK from "https://esm.sh/@bunny.net/edgescript-sdk"
+
+BunnySDK.net.http.serve(async (request: Request): Promise<Response> => {
+
+    return Response.redirect('https://example.com', 301)
+})
+```
+
+### Magic Containers
+
+AWS Fargate / Cloudflare Containers equivalent.
+
+- Edge-focused "Container-as-a-Service"
+- Point to a Docker image → Bunny auto-scales it across 40+ regions
+- Attaches anycast networking\*
+- Bills per CPU/memory-second (not for idle VMs)
+
+\*_Anycast networking_: a routing technique where the same IP address is advertised from multiple locations.
+
+### Bunny Database (Preview)
+
+libSQL-powered — an open-source SQLite fork that adds:
+
+- Replication & clustering
+- User-defined functions written in WASM (write extensions in any language)
+- Full compatibility with the existing SQLite ecosystem and tooling
+- Edge-hosted with millisecond read latency globally
+
+### And More
+
+CDN, Fonts, DNS, Stream (video), Object Storage
+
+---
+
+## Comparisons
+
+_Thanks to [@AmpCode](https://ampcode.com) for the numbers on these comparisons._
+
+### Edge Scripts vs Cloudflare Workers
+
+| Aspect         | Bunny.net Edge Scripting                      | Cloudflare Workers                                         |
+|----------------|-----------------------------------------------|------------------------------------------------------------|
+| Runtime        | Deno (TypeScript/JS native)                   | V8 isolates (custom runtime)                               |
+| Pricing        | $0.20/million requests + $0.02/1000s CPU time | $5/mo base + $0.30/million requests + $0.02/million CPU ms |
+| Free Tier      | None ($1/mo minimum)                          | 100K requests/day, 10ms CPU/invocation                     |
+| Edge Locations | 119 PoPs                                      | 300+ PoPs                                                  |
+| Latency        | ~24ms global avg                              | ~25-30ms global avg                                        |
+| npm/WASM       | Native npm + WASM support                     | Supported (with bundling)                                  |
+| Vendor Lock-in | Low (Deno is open source)                     | Higher (proprietary runtime)                               |
+| CPU Limits     | Not explicitly capped per request             | 30s default, 5 min max                                     |
+
+**TL;DR:** Bunny is cheaper for high-volume workloads. Cloudflare's free tier is unbeatable for experimentation.
+
+### Magic Containers vs AWS Fargate
+
+
+| Aspect          | Bunny Magic Containers           | AWS Fargate                       |
+|-----------------|----------------------------------|-----------------------------------|
+| Model           | Global edge container deployment | Regional serverless containers    |
+| CPU Pricing     | $0.02/CPU-hour                   | $0.04048/vCPU-hour (Linux x86)    |
+| Memory Pricing  | $0.005/GB-hour                   | $0.004445/GB-hour                 |
+| Storage         | $0.10/GB-month                   | 20GB free, then $0.000111/GB-hour |
+| Regions         | 41+ edge locations               | AWS regions only                  |
+| AI Auto-scaling | Yes (intelligent placement)      | Manual or App Auto Scaling        |
+| Anycast IP      | $2/month                         | Not included (ALB/NLB extra)      |
+| TCP/UDP Support | Full low-level networking        | Via NLB (extra cost)              |
+| GPU Support     | Coming soon                      | Not supported                     |
+| Minimum         | Pay-as-you-go                    | 1 min (Linux), 5 min (Windows)    |
+
+
+**Example Cost** (1 vCPU, 2GB, 10 min/day for 30 days):
+
+| Service           | Monthly Cost |
+| ----------------- | ------------ |
+| Magic Containers  | ~$0.15       |
+| AWS Fargate       | ~$1.23       |
+
+**TL;DR:** Magic Containers is ~50% cheaper on CPU, includes global edge deployment and built-in anycast.
+
+### Bunny Database (libSQL) vs Cloudflare D1
+
+| Aspect       | Bunny Database (Preview)         | Cloudflare D1                                    |
+|--------------|----------------------------------|--------------------------------------------------|
+| Engine       | libSQL (SQLite fork)             | SQLite                                           |
+| Status       | Open preview (coming soon)       | GA                                               |
+| Distribution | Globally distributed replicas    | Primary + read replicas                          |
+| Pricing      | Usage-based (TBD)                | $0.001/M reads, $1.00/M writes, $0.75/GB storage |
+| Free Tier    | TBD                              | 5M reads/day, 100K writes/day, 5GB storage       |
+| Features     | Vector search, encryption, RBAC  | Time Travel, read replication                    |
+| Integration  | Edge Scripting, Magic Containers | Workers, Pages                                   |
+| Latency      | Millisecond reads globally       | Low (with replicas)                              |
+
+**TL;DR:** No verdict yet — Bunny's DB is in closed beta with no public pricing.
+___
+
+#### What compelled me to write this?
+
+I saw a post by [@GergelyOrosz](https://x.com/GergelyOrosz) on Bluesky mentioning [@BunnyCDN](https://x.com/BunnyCDN) and searched for it on Hacker News, X & Bluesky. Everyone's experience is positive. So I spent the next 4 hours analyzing it.

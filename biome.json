@@ -1,13 +1,16 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.6/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.9/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
   },
   "assist": {
+    "enabled": true,
     "actions": {
+      "recommended": true,
       "source": {
+        "recommended": true,
         "organizeImports": "off"
       }
     }
@@ -17,9 +20,26 @@
       "**",
       "!_",
       "src/**",
-      "!node_modules"
+      "!node_modules",
+      "!worker-configuration.d.ts"
     ],
     "ignoreUnknown": true
+  },
+  "html": {
+    "formatter": {
+      "enabled": true,
+      "bracketSameLine": false,
+      "attributePosition": "auto",
+      "indentScriptAndStyle": true,
+      "selfCloseVoidElements": "never"
+    },
+    "linter": {
+      "enabled": true
+    },
+    "assist": {
+      "enabled": true
+    },
+    "experimentalFullSupportEnabled": true
   },
   "formatter": {
     "enabled": true,
@@ -27,7 +47,7 @@
     "lineWidth": 100,
     "indentStyle": "space",
     "bracketSpacing": true,
-
+    "bracketSameLine": false,
     "formatWithErrors": true,
     "attributePosition": "multiline",
     "includes": [
@@ -52,7 +72,8 @@
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "off",
-        "useImportExtensions": "off"
+        "useImportExtensions": "off",
+        "noUndeclaredDependencies": "off"
       },
       "complexity": {
         "noBannedTypes": "off",
@@ -66,7 +87,8 @@
         "useTemplate": "off",
         "noNonNullAssertion": "off",
         "useNamingConvention": "off",
-        "noUnusedTemplateLiteral": "off"
+        "noUnusedTemplateLiteral": "off",
+        "noDescendingSpecificity": "off"
       },
       "suspicious": {
         "noExplicitAny": "off",
@@ -100,6 +122,9 @@
     }
   },
   "json": {
+    "assist": {
+      "enabled": true
+    },
     "linter": {
       "enabled": true
     },
@@ -114,11 +139,15 @@
     }
   },
   "css": {
+    "assist": {
+      "enabled": true
+    },
     "linter": {
       "enabled": true
     },
     "parser": {
-      "tailwindDirectives": true
+      "tailwindDirectives": true,
+      "allowWrongLineComments": true
     },
     "globals": [
       "@theme"

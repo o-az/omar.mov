@@ -4,7 +4,12 @@
       "settings": {
         "classFunctions": [
           "cva",
-          "cx"
+          "cx",
+          "twMerge",
+          "class",
+          "tw\\.[a-z-]+",
+          "cn",
+          "clsx"
         ],
         "experimental": {
           "classRegex": [
@@ -30,10 +35,15 @@
   ],
   "file_scan_exclusions": [
     "**/.wrangler",
-    "**/.tanstack"
+    "**/.tanstack",
+    "**/.vscode",
+    ".git"
   ],
   "languages": {
     "HTML": {
+      "language_servers": [
+        "biome"
+      ],
       "code_actions_on_format": {
         "source.fixAll.biome": true,
         "source.organizeImports.biome": true
@@ -44,7 +54,16 @@
         }
       }
     },
+    "MDX": {
+      "language_servers": [
+        "typescript-language-server",
+        "biome"
+      ]
+    },
     "JSON": {
+      "language_servers": [
+        "biome"
+      ],
       "code_actions_on_format": {
         "source.fixAll.biome": true,
         "source.organizeImports.biome": true
@@ -56,6 +75,9 @@
       }
     },
     "JSONC": {
+      "language_servers": [
+        "biome"
+      ],
       "code_actions_on_format": {
         "source.fixAll.biome": true,
         "source.organizeImports.biome": true
@@ -67,6 +89,10 @@
       }
     },
     "JSDoc": {
+      "language_servers": [
+        "typescript-language-server",
+        "biome"
+      ],
       "code_actions_on_format": {
         "source.fixAll.astro": true,
         "source.organizeImports.biome": true
@@ -78,6 +104,10 @@
       }
     },
     "TSX": {
+      "language_servers": [
+        "typescript-language-server",
+        "biome"
+      ],
       "code_actions_on_format": {
         "source.fixAll.biome": true,
         "source.organizeImports.biome": true
@@ -89,6 +119,10 @@
       }
     },
     "JavaScript": {
+      "language_servers": [
+        "typescript-language-server",
+        "biome"
+      ],
       "code_actions_on_format": {
         "source.fixAll.biome": true,
         "source.organizeImports.biome": true
@@ -100,6 +134,10 @@
       }
     },
     "TypeScript": {
+      "language_servers": [
+        "typescript-language-server",
+        "biome"
+      ],
       "code_actions_on_format": {
         "source.fixAll.biome": true,
         "source.organizeImports.biome": true

@@ -4,10 +4,12 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.preferTypeOnlyAutoImports": true,
-  "typescript.experimental.useTsgo": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "never"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
   },
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
@@ -27,8 +29,24 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
+  "[mdx]": {
+    "editor.defaultFormatter": "unifiedjs.vscode-mdx"
+  },
   "[markdown]": {
-    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    "editor.defaultFormatter": "unifiedjs.vscode-mdx"
+  },
+  "tailwindCSS.classFunctions": [
+    "cva",
+    "cx",
+    "twMerge",
+    "class",
+    "tw\\.[a-z-]+",
+    "cn",
+    "clsx"
+  ],
+
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "html"
   },
   "files.exclude": {
     ".wrangler": true
@@ -42,9 +60,9 @@
   "files.associations": {
     ".env.*": "dotenv",
     "bun.lock": "jsonc",
+    "*.css": "tailwindcss",
     "biome.json": "jsonc",
-    ".vscode/*.json": "jsonc",
-    "*.css": "tailwindcss"
+    ".vscode/*.json": "jsonc"
   },
   "search.exclude": {
     "**/_/**": true,
