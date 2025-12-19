@@ -76,7 +76,8 @@ function RouteComponent() {
               class='[anchor-name:--email-anchor]'
               data-button='email'
               popovertarget='email-popover'
-              popovertargetaction='toggle'>
+              popovertargetaction='toggle'
+              onClick={() => navigator.clipboard.writeText('gm@omar.mov')}>
               gm@omar.mov
             </button>
             <div
