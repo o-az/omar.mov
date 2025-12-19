@@ -103,12 +103,7 @@ export default defineConfig(config => {
       VitePluginTanstackStart({
         start: { entry: './src/start.ts' },
         server: { entry: './src/server.ts' },
-        client: { entry: './src/client.ts' },
-        router: {
-          experimental: {
-            nonNestedRoutes: true
-          }
-        }
+        client: { entry: './src/client.ts' }
       }),
       rollupPluginMdx(),
       VitePluginSolid({ ssr: true })
