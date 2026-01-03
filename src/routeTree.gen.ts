@@ -9,12 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PostsRouteRouteImport } from './routes/posts/route'
+import { Route as PostsRouteImport } from './routes/posts'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PostsIndexRouteImport } from './routes/posts/index'
 import { Route as PostsPostRouteImport } from './routes/posts/$post'
-import { Route as ApiRssRouteImport } from './routes/api/rss'
 
-const PostsRouteRoute = PostsRouteRouteImport.update({
+const PostsRoute = PostsRouteImport.update({
   id: '/posts',
   path: '/posts',
   getParentRoute: () => rootRouteImport,
@@ -24,48 +24,46 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PostsIndexRoute = PostsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PostsRoute,
+} as any)
 const PostsPostRoute = PostsPostRouteImport.update({
   id: '/$post',
   path: '/$post',
-  getParentRoute: () => PostsRouteRoute,
-} as any)
-const ApiRssRoute = ApiRssRouteImport.update({
-  id: '/api/rss',
-  path: '/api/rss',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PostsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/posts': typeof PostsRouteRouteWithChildren
-  '/api/rss': typeof ApiRssRoute
+  '/posts': typeof PostsRouteWithChildren
   '/posts/$post': typeof PostsPostRoute
+  '/posts/': typeof PostsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/posts': typeof PostsRouteRouteWithChildren
-  '/api/rss': typeof ApiRssRoute
   '/posts/$post': typeof PostsPostRoute
+  '/posts': typeof PostsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/posts': typeof PostsRouteRouteWithChildren
-  '/api/rss': typeof ApiRssRoute
+  '/posts': typeof PostsRouteWithChildren
   '/posts/$post': typeof PostsPostRoute
+  '/posts/': typeof PostsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/posts' | '/api/rss' | '/posts/$post'
+  fullPaths: '/' | '/posts' | '/posts/$post' | '/posts/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/posts' | '/api/rss' | '/posts/$post'
-  id: '__root__' | '/' | '/posts' | '/api/rss' | '/posts/$post'
+  to: '/' | '/posts/$post' | '/posts'
+  id: '__root__' | '/' | '/posts' | '/posts/$post' | '/posts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  PostsRouteRoute: typeof PostsRouteRouteWithChildren
-  ApiRssRoute: typeof ApiRssRoute
+  PostsRoute: typeof PostsRouteWithChildren
 }
 
 declare module '@tanstack/solid-router' {
@@ -74,7 +72,7 @@ declare module '@tanstack/solid-router' {
       id: '/posts'
       path: '/posts'
       fullPath: '/posts'
-      preLoaderRoute: typeof PostsRouteRouteImport
+      preLoaderRoute: typeof PostsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -84,39 +82,38 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/posts/': {
+      id: '/posts/'
+      path: '/'
+      fullPath: '/posts/'
+      preLoaderRoute: typeof PostsIndexRouteImport
+      parentRoute: typeof PostsRoute
+    }
     '/posts/$post': {
       id: '/posts/$post'
       path: '/$post'
       fullPath: '/posts/$post'
       preLoaderRoute: typeof PostsPostRouteImport
-      parentRoute: typeof PostsRouteRoute
-    }
-    '/api/rss': {
-      id: '/api/rss'
-      path: '/api/rss'
-      fullPath: '/api/rss'
-      preLoaderRoute: typeof ApiRssRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PostsRoute
     }
   }
 }
 
-interface PostsRouteRouteChildren {
+interface PostsRouteChildren {
   PostsPostRoute: typeof PostsPostRoute
+  PostsIndexRoute: typeof PostsIndexRoute
 }
 
-const PostsRouteRouteChildren: PostsRouteRouteChildren = {
+const PostsRouteChildren: PostsRouteChildren = {
   PostsPostRoute: PostsPostRoute,
+  PostsIndexRoute: PostsIndexRoute,
 }
 
-const PostsRouteRouteWithChildren = PostsRouteRoute._addFileChildren(
-  PostsRouteRouteChildren,
-)
+const PostsRouteWithChildren = PostsRoute._addFileChildren(PostsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  PostsRouteRoute: PostsRouteRouteWithChildren,
-  ApiRssRoute: ApiRssRoute,
+  PostsRoute: PostsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -4,7 +4,7 @@ import { For } from 'solid-js'
 
 type Frontmatter = { title: string; slug: string }
 
-export const Route = createFileRoute('/posts')({
+export const Route = createFileRoute('/posts/')({
   loader: async () => {
     const posts = fetchAllPosts() as {
       [key: string]: () => Promise<{ frontmatter: Frontmatter }>
