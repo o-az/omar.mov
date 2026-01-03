@@ -20,6 +20,7 @@
       "**",
       "!_",
       "src/**",
+      "!src/routeTree.gen.ts",
       "!node_modules",
       "!worker-configuration.d.ts"
     ],
@@ -53,6 +54,7 @@
     "includes": [
       "**",
       "!_",
+      "!src/routeTree.gen.ts",
       "!bun.lock"
     ]
   },
@@ -65,6 +67,7 @@
       "**",
       "!_",
       "!bun.lock",
+      "!src/routeTree.gen.ts",
       "!node_modules"
     ],
     "enabled": true,

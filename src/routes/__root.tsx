@@ -14,7 +14,6 @@ export const Route = createRootRoute({
     title: 'omar.mov',
     description: "how to reach me and see what I'm up to",
     keywords: 'o-az, amorfati, site, blog, dev',
-
     meta: [
       { charset: 'utf-8' },
       { name: 'description', content: 'me site' },
@@ -29,6 +28,24 @@ export const Route = createRootRoute({
       {
         rel: 'icon',
         href: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌩️</text></svg>'
+      }
+    ],
+    scripts: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: 'omar.mov',
+          url: 'https://omar.mov',
+          publisher: {
+            '@type': 'Organization',
+            name: 'omar.mov',
+            url: 'https://omar.mov',
+            logo: 'https://omar.mov/logo.png',
+            sameAs: ['https://twitter.com/omaraz', 'https://github.com/o-az']
+          }
+        })
       }
     ]
   }),

@@ -44,7 +44,6 @@
     "cn",
     "clsx"
   ],
-
   "tailwindCSS.includeLanguages": {
     "plaintext": "html"
   },
@@ -70,5 +69,8 @@
     "bun.lock": true,
     "**/node_modules": true,
     "**/routeTree.gen.ts": true
+  },
+  "markdownlint.config": {
+    "MD033": false
   }
 }

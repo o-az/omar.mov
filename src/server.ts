@@ -1,15 +1,22 @@
-import handler, { createServerEntry } from '@tanstack/solid-start/server-entry'
+import {
+  createStartHandler,
+  defaultStreamHandler,
+  defineHandlerCallback
+} from '@tanstack/solid-start/server'
+import { createServerEntry } from '@tanstack/solid-start/server-entry'
 
-export default createServerEntry({
-  fetch: handler.fetch
-})
+const entryHandler = defineHandlerCallback(context => defaultStreamHandler(context))
+
+const fetch = createStartHandler(entryHandler)
+
+export default createServerEntry({ fetch })
 
 declare module '@tanstack/solid-start' {
   interface Register {
     server: {
       requestContext?: {
+        nonce: string
         executionContext: ExecutionContext
-        env: Cloudflare.Env
       }
     }
   }

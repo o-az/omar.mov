@@ -103,7 +103,11 @@ export default defineConfig(config => {
       VitePluginTanstackStart({
         start: { entry: './src/start.ts' },
         server: { entry: './src/server.ts' },
-        client: { entry: './src/client.ts' }
+        client: { entry: './src/client.ts' },
+        prerender: {
+          enabled: true,
+          crawlLinks: true
+        }
       }),
       rollupPluginMdx(),
       VitePluginSolid({ ssr: true })

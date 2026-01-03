@@ -5,6 +5,10 @@ interface Env {
   readonly LOGGING?: 'verbose' | 'normal' | 'silent' | undefined
 
   readonly APP_VERSION: string
+
+  readonly VITE_UTTERANCES_REPO?: string
+  readonly VITE_UTTERANCES_LABEL?: string
+  readonly VITE_UTTERANCES_THEME?: string
 }
 
 // Node.js `process.env` auto-completion
