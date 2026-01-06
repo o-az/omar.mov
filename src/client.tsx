@@ -1,3 +1,4 @@
+import 'process'
 import { hydrate } from 'solid-js/web'
 import { StartClient, hydrateStart } from '@tanstack/solid-start/client'
 

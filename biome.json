@@ -67,8 +67,8 @@
       "**",
       "!_",
       "!bun.lock",
-      "!src/routeTree.gen.ts",
-      "!node_modules"
+      "!node_modules",
+      "!src/routeTree.gen.ts"
     ],
     "enabled": true,
     "rules": {
@@ -105,6 +105,9 @@
     "assist": {
       "enabled": true
     },
+    "globals": [
+      "process"
+    ],
     "formatter": {
       "enabled": true,
       "indentWidth": 2,

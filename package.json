@@ -42,6 +42,7 @@
     "@types/node": "^25.0.3",
     "@typescript/native-preview": "^7.0.0-dev.20260105.1",
     "eruda": "^3.4.3",
+    "process": "^0.11.10",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-meta": "^4.0.1",
     "rehype-slug": "^6.0.0",
