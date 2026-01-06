@@ -1,23 +1,23 @@
-import { Bash } from 'just-bash'
+import { Bash, defineCommand } from 'just-bash'
 import { createFileRoute } from '@tanstack/solid-router'
 import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
-
-type HistoryEntry = {
-  id: number
-  command: string
-  stdout: string
-  stderr: string
-  exitCode: number
-  durationMs: number
-}
 
 export const Route = createFileRoute('/cli')({
   component: RouteComponent
 })
 
 function RouteComponent() {
+  const [history, setHistory] = createSignal<
+    Array<{
+      id: number
+      command: string
+      stdout: string
+      stderr: string
+      exitCode: number
+      durationMs: number
+    }>
+  >([])
   const [input, setInput] = createSignal('')
-  const [history, setHistory] = createSignal<HistoryEntry[]>([])
   const [isRunning, setIsRunning] = createSignal(false)
   const [networkEnabled, setNetworkEnabled] = createSignal(false)
 
@@ -25,9 +25,16 @@ function RouteComponent() {
   let outputRef: HTMLDivElement | undefined
   let inputRef: HTMLInputElement | undefined
 
+  const isClearCommand = (cmd: string) => cmd === 'clear' || cmd === '/clear' || cmd === 'cls'
+
   const createShell = (withNetwork: boolean) =>
     new Bash({
       network: withNetwork ? { dangerouslyAllowFullInternetAccess: true } : undefined,
+      customCommands: [
+        defineCommand('clear', async () => ({ stdout: '', stderr: '', exitCode: 0 })),
+        defineCommand('cls', async () => ({ stdout: '', stderr: '', exitCode: 0 })),
+        defineCommand('/clear', async () => ({ stdout: '', stderr: '', exitCode: 0 }))
+      ],
       files: {
         '/home/user/README.txt': [
           'Welcome to the in-memory shell.',
@@ -69,13 +76,6 @@ function RouteComponent() {
     const command = input().trim()
     if (!command) return
 
-    if (command === 'clear' || command === '/clear' || command === 'cls') {
-      setHistory([])
-      setInput('')
-      queueMicrotask(() => inputRef?.focus())
-      return
-    }
-
     if (!shell) return
 
     setIsRunning(true)
@@ -83,17 +83,21 @@ function RouteComponent() {
     try {
       const result = await shell.exec(command)
       const durationMs = Math.round(performance.now() - started)
-      setHistory(list => [
-        ...list,
-        {
-          id: list.length + 1,
-          command,
-          stdout: result.stdout,
-          stderr: result.stderr,
-          exitCode: result.exitCode,
-          durationMs
-        }
-      ])
+      if (isClearCommand(command)) {
+        setHistory([])
+      } else {
+        setHistory(list => [
+          ...list,
+          {
+            id: list.length + 1,
+            command,
+            stdout: result.stdout,
+            stderr: result.stderr,
+            exitCode: result.exitCode,
+            durationMs
+          }
+        ])
+      }
     } catch (error) {
       const durationMs = Math.round(performance.now() - started)
       const message = error instanceof Error ? error.message : String(error)
@@ -116,7 +120,7 @@ function RouteComponent() {
   }
 
   return (
-    <main class='mx-auto flex max-w-5xl flex-col gap-4 font-[Lilex] px-4 min-h-[70vh] max-h-screen max-[650px]:max-w-none max-[650px]:w-auto max-[650px]:min-h-[calc(100svh-2.25rem)] max-[650px]:mx-[-1.5rem] max-[650px]:gap-2.5 max-[650px]:px-0 max-[650px]:pb-1'>
+    <main class='mx-auto flex max-w-5xl flex-col gap-4 font-[Lilex] px-4 min-h-[70vh] max-h-screen max-[650px]:max-w-none max-[650px]:w-auto max-[650px]:min-h-[calc(100svh-2.25rem)] max-[650px]:-mx-6 max-[650px]:gap-2.5 max-[650px]:px-0 max-[650px]:pb-1'>
       <header class='flex flex-wrap items-baseline justify-between gap-2 max-[650px]:px-3'>
         <div>
           <p class='text-2xl font-bold'>sandboxed shell</p>
@@ -189,7 +193,7 @@ function RouteComponent() {
         </div>
 
         <form
-          class='mt-4 flex items-center gap-2 font-mono text-sm max-[650px]:px-3 max-[650px]:pb-0'
+          class='mt-4 flex items-center gap-2 font-mono text-sm max-[650px]:px-3 max-[650px]:pb-1'
           onSubmit={handleSubmit}>
           <input
             ref={inputRef}

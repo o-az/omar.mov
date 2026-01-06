@@ -2,6 +2,7 @@ import NodePath from 'node:path'
 import NodeProcess from 'node:process'
 import { defineConfig, loadEnv } from 'vite'
 import VitePluginInfo from 'unplugin-info/vite'
+import nodePolyfills from 'rollup-plugin-node-polyfills'
 import { default as VitePluginSolid } from 'vite-plugin-solid'
 import VitePluginDevtoolsJson from 'vite-plugin-devtools-json'
 import { default as VitePluginTailwindCSS } from '@tailwindcss/vite'
@@ -29,7 +30,20 @@ export default defineConfig(config => {
         'solid-jsx': NodePath.resolve(import.meta.dirname, 'src/lib/solid-jsx/jsx-runtime.ts')
       }
     },
+    optimizeDeps: {
+      exclude: ['solid-jsx'],
+      entries: ['./src/**/*.{ts,tsx}']
+    },
+    server: {
+      port: Number(env.PORT || randomIntInclusive(3_100, 8_100))
+    },
+    build: {
+      minify: false,
+      target: 'esnext',
+      emptyOutDir: true
+    },
     plugins: [
+      nodePolyfills(),
       VitePluginDevtoolsJson(),
       VitePluginTanstackDevtools({
         removeDevtoolsOnBuild: true,
@@ -52,19 +66,7 @@ export default defineConfig(config => {
       }),
       rollupPluginMdx(),
       VitePluginSolid({ ssr: true })
-    ],
-    optimizeDeps: {
-      exclude: ['solid-jsx'],
-      entries: ['./src/**/*.{ts,tsx}']
-    },
-    server: {
-      port: Number(env.PORT || randomIntInclusive(3_100, 8_100))
-    },
-    build: {
-      minify: false,
-      target: 'esnext',
-      emptyOutDir: true
-    }
+    ]
   }
 })
 
