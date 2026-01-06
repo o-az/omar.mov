@@ -14,6 +14,7 @@ import { Route as CliRouteRouteImport } from './routes/cli/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PostsIndexRouteImport } from './routes/posts/index'
 import { Route as PostsPostRouteImport } from './routes/posts/$post'
+import { Route as ApiCliProxyRouteImport } from './routes/api/cli-proxy'
 
 const PostsRoute = PostsRouteImport.update({
   id: '/posts',
@@ -40,17 +41,24 @@ const PostsPostRoute = PostsPostRouteImport.update({
   path: '/$post',
   getParentRoute: () => PostsRoute,
 } as any)
+const ApiCliProxyRoute = ApiCliProxyRouteImport.update({
+  id: '/api/cli-proxy',
+  path: '/api/cli-proxy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cli': typeof CliRouteRoute
   '/posts': typeof PostsRouteWithChildren
+  '/api/cli-proxy': typeof ApiCliProxyRoute
   '/posts/$post': typeof PostsPostRoute
   '/posts/': typeof PostsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cli': typeof CliRouteRoute
+  '/api/cli-proxy': typeof ApiCliProxyRoute
   '/posts/$post': typeof PostsPostRoute
   '/posts': typeof PostsIndexRoute
 }
@@ -59,21 +67,36 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/cli': typeof CliRouteRoute
   '/posts': typeof PostsRouteWithChildren
+  '/api/cli-proxy': typeof ApiCliProxyRoute
   '/posts/$post': typeof PostsPostRoute
   '/posts/': typeof PostsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cli' | '/posts' | '/posts/$post' | '/posts/'
+  fullPaths:
+    | '/'
+    | '/cli'
+    | '/posts'
+    | '/api/cli-proxy'
+    | '/posts/$post'
+    | '/posts/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cli' | '/posts/$post' | '/posts'
-  id: '__root__' | '/' | '/cli' | '/posts' | '/posts/$post' | '/posts/'
+  to: '/' | '/cli' | '/api/cli-proxy' | '/posts/$post' | '/posts'
+  id:
+    | '__root__'
+    | '/'
+    | '/cli'
+    | '/posts'
+    | '/api/cli-proxy'
+    | '/posts/$post'
+    | '/posts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CliRouteRoute: typeof CliRouteRoute
   PostsRoute: typeof PostsRouteWithChildren
+  ApiCliProxyRoute: typeof ApiCliProxyRoute
 }
 
 declare module '@tanstack/solid-router' {
@@ -113,6 +136,13 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof PostsPostRouteImport
       parentRoute: typeof PostsRoute
     }
+    '/api/cli-proxy': {
+      id: '/api/cli-proxy'
+      path: '/api/cli-proxy'
+      fullPath: '/api/cli-proxy'
+      preLoaderRoute: typeof ApiCliProxyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -132,6 +162,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CliRouteRoute: CliRouteRoute,
   PostsRoute: PostsRouteWithChildren,
+  ApiCliProxyRoute: ApiCliProxyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
