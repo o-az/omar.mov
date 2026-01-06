@@ -31,3 +31,5 @@ lerna-debug.log*
 _
 .tanstack
 .wrangler
+# Localflare generated files
+.localflare/

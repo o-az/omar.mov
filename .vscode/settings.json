@@ -48,7 +48,11 @@
     "plaintext": "html"
   },
   "files.exclude": {
-    ".wrangler": true
+    ".zed": true,
+    ".claude": true,
+    ".wrangler": true,
+    ".tanstack": true,
+    ".localflare": true
   },
   "files.watcherExclude": {
     "**/routeTree.gen.ts": true

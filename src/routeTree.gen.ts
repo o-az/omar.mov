@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PostsRouteImport } from './routes/posts'
+import { Route as CliRouteRouteImport } from './routes/cli/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PostsIndexRouteImport } from './routes/posts/index'
 import { Route as PostsPostRouteImport } from './routes/posts/$post'
@@ -17,6 +18,11 @@ import { Route as PostsPostRouteImport } from './routes/posts/$post'
 const PostsRoute = PostsRouteImport.update({
   id: '/posts',
   path: '/posts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CliRouteRoute = CliRouteRouteImport.update({
+  id: '/cli',
+  path: '/cli',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,32 +43,36 @@ const PostsPostRoute = PostsPostRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cli': typeof CliRouteRoute
   '/posts': typeof PostsRouteWithChildren
   '/posts/$post': typeof PostsPostRoute
   '/posts/': typeof PostsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cli': typeof CliRouteRoute
   '/posts/$post': typeof PostsPostRoute
   '/posts': typeof PostsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cli': typeof CliRouteRoute
   '/posts': typeof PostsRouteWithChildren
   '/posts/$post': typeof PostsPostRoute
   '/posts/': typeof PostsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/posts' | '/posts/$post' | '/posts/'
+  fullPaths: '/' | '/cli' | '/posts' | '/posts/$post' | '/posts/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/posts/$post' | '/posts'
-  id: '__root__' | '/' | '/posts' | '/posts/$post' | '/posts/'
+  to: '/' | '/cli' | '/posts/$post' | '/posts'
+  id: '__root__' | '/' | '/cli' | '/posts' | '/posts/$post' | '/posts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CliRouteRoute: typeof CliRouteRoute
   PostsRoute: typeof PostsRouteWithChildren
 }
 
@@ -73,6 +83,13 @@ declare module '@tanstack/solid-router' {
       path: '/posts'
       fullPath: '/posts'
       preLoaderRoute: typeof PostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cli': {
+      id: '/cli'
+      path: '/cli'
+      fullPath: '/cli'
+      preLoaderRoute: typeof CliRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -113,6 +130,7 @@ const PostsRouteWithChildren = PostsRoute._addFileChildren(PostsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CliRouteRoute: CliRouteRoute,
   PostsRoute: PostsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
