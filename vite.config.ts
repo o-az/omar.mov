@@ -62,7 +62,15 @@ export default defineConfig(config => {
       VitePluginTanstackStart({
         start: { entry: './src/start.ts' },
         server: { entry: './src/server.ts' },
-        client: { entry: './src/client.ts' }
+        client: { entry: './src/client.ts' },
+        prerender: {
+          enabled: true,
+          crawlLinks: true
+        },
+        sitemap: {
+          enabled: true,
+          host: 'https://omar.mov'
+        }
       }),
       rollupPluginMdx(),
       VitePluginSolid({ ssr: true })

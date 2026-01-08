@@ -6,117 +6,125 @@ export const Route = createFileRoute('/cli')({
   component: RouteComponent
 })
 
-type CurlParseResult =
-  | {
-      ok: true
-      value: {
-        url: string
-        method: string
-        headers: Record<string, string>
-        body?: string
-        includeHeaders: boolean
-        followRedirects: boolean
+// Custom curl command that uses the server-side proxy to bypass CORS
+const createProxiedCurl = () =>
+  defineCommand('curl', async (args: string[]) => {
+    // Parse basic curl options
+    let url = ''
+    let method = 'GET'
+    const headers: Record<string, string> = {}
+    let body: string | undefined
+    let includeHeaders = false
+    let followRedirects = true
+    let verbose = false
+    let silent = false
+
+    for (let i = 0; i < args.length; i++) {
+      const arg = args[i]
+      if (!arg) continue
+
+      if (arg === '-X' || arg === '--request') {
+        method = args[++i] ?? 'GET'
+      } else if (arg === '-H' || arg === '--header') {
+        const header = args[++i]
+        if (header) {
+          const colonIdx = header.indexOf(':')
+          if (colonIdx > 0) {
+            const name = header.slice(0, colonIdx).trim()
+            const value = header.slice(colonIdx + 1).trim()
+            headers[name] = value
+          }
+        }
+      } else if (arg === '-d' || arg === '--data' || arg === '--data-raw') {
+        body = args[++i]
+        if (method === 'GET') method = 'POST'
+      } else if (arg === '-i' || arg === '--include') {
+        includeHeaders = true
+      } else if (arg === '-L' || arg === '--location') {
+        followRedirects = true
+      } else if (arg === '-v' || arg === '--verbose') {
+        verbose = true
+      } else if (arg === '-s' || arg === '--silent') {
+        silent = true
+      } else if (arg === '-I' || arg === '--head') {
+        method = 'HEAD'
+        includeHeaders = true
+      } else if (!arg.startsWith('-')) {
+        url = arg
       }
-    }
-  | {
-      ok: false
-      error: string
-    }
-
-const parseCurlArgs = (args: string[]): CurlParseResult => {
-  const headers: Record<string, string> = {}
-  let method: string | undefined
-  let body: string | undefined
-  let includeHeaders = false
-  let followRedirects = false
-  let url: string | undefined
-
-  for (let index = 0; index < args.length; index += 1) {
-    const arg = args[index]
-    if (!arg) continue
-
-    if (arg === '-X' || arg === '--request') {
-      const next = args[index + 1]
-      if (!next) return { ok: false, error: 'curl: option requires an argument -- X' }
-      method = next.toUpperCase()
-      index += 1
-      continue
-    }
-
-    if (arg === '-H' || arg === '--header') {
-      const next = args[index + 1]
-      if (!next) return { ok: false, error: 'curl: option requires an argument -- H' }
-      const separatorIndex = next.indexOf(':')
-      if (separatorIndex === -1) {
-        return { ok: false, error: 'curl: header must be in "Key: Value" format' }
-      }
-      const key = next.slice(0, separatorIndex).trim().toLowerCase()
-      const value = next.slice(separatorIndex + 1).trim()
-      if (!key) return { ok: false, error: 'curl: header key cannot be empty' }
-      headers[key] = value
-      index += 1
-      continue
-    }
-
-    if (arg === '-d' || arg === '--data' || arg === '--data-raw' || arg === '--data-binary') {
-      const next = args[index + 1]
-      if (!next) return { ok: false, error: 'curl: option requires an argument -- d' }
-      body = next
-      index += 1
-      continue
-    }
-
-    if (arg === '-I' || arg === '--head') {
-      method = 'HEAD'
-      includeHeaders = true
-      continue
-    }
-
-    if (arg === '-i' || arg === '--include') {
-      includeHeaders = true
-      continue
-    }
-
-    if (arg === '-L' || arg === '--location') {
-      followRedirects = true
-      continue
-    }
-
-    if (arg === '-s' || arg === '--silent' || arg === '--compressed') continue
-
-    if (arg.startsWith('-')) {
-      return { ok: false, error: `curl: unsupported option ${arg}` }
     }
 
     if (!url) {
-      url = arg
+      return { stdout: '', stderr: 'curl: no URL specified\n', exitCode: 2 }
     }
-  }
 
-  if (!url) return { ok: false, error: 'curl: no URL specified' }
-
-  const resolvedMethod = method ?? (body ? 'POST' : 'GET')
-
-  return {
-    ok: true,
-    value: {
-      url,
-      method: resolvedMethod,
-      headers,
-      body,
-      includeHeaders,
-      followRedirects
+    // Normalize URL - add https:// if no protocol
+    if (!url.match(/^https?:\/\//)) {
+      url = `https://${url}`
     }
-  }
-}
 
-const formatHeaderBlock = (status: number, statusText: string, headers: Record<string, string>) => {
-  const lines = [`HTTP/1.1 ${status} ${statusText}`]
-  for (const [key, value] of Object.entries(headers)) {
-    lines.push(`${key}: ${value}`)
-  }
-  return `${lines.join('\n')}\n\n`
-}
+    try {
+      const response = await fetch('/api/cli-proxy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url,
+          method,
+          headers: Object.keys(headers).length > 0 ? headers : undefined,
+          body,
+          followRedirects
+        })
+      })
+
+      const result = (await response.json()) as
+        | {
+            ok: true
+            status: number
+            statusText: string
+            headers: Record<string, string>
+            body: string
+            url: string
+          }
+        | { ok: false; error: string }
+
+      if (!result.ok) {
+        return { stdout: '', stderr: `curl: (7) ${result.error}\n`, exitCode: 7 }
+      }
+
+      let output = ''
+
+      if (verbose) {
+        output += `> ${method} ${url}\n`
+        for (const [name, value] of Object.entries(headers)) {
+          output += `> ${name}: ${value}\n`
+        }
+        output += '>\n'
+        output += `< HTTP/1.1 ${result.status} ${result.statusText}\n`
+        for (const [name, value] of Object.entries(result.headers)) {
+          output += `< ${name}: ${value}\n`
+        }
+        output += '<\n'
+      }
+
+      if (includeHeaders && !verbose) {
+        output += `HTTP/1.1 ${result.status} ${result.statusText}\r\n`
+        for (const [name, value] of Object.entries(result.headers)) {
+          output += `${name}: ${value}\r\n`
+        }
+        output += '\r\n'
+      }
+
+      if (method !== 'HEAD') {
+        output += result.body
+      }
+
+      return { stdout: output, stderr: '', exitCode: 0 }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      if (silent) return { stdout: '', stderr: '', exitCode: 7 }
+      return { stdout: '', stderr: `curl: (7) ${message}\n`, exitCode: 7 }
+    }
+  })
 
 function RouteComponent() {
   const [history, setHistory] = createSignal<
@@ -143,82 +151,14 @@ function RouteComponent() {
     const customCommands = [
       defineCommand('clear', async () => ({ stdout: '', stderr: '', exitCode: 0 })),
       defineCommand('cls', async () => ({ stdout: '', stderr: '', exitCode: 0 })),
-      defineCommand('/clear', async () => ({ stdout: '', stderr: '', exitCode: 0 }))
+      defineCommand('/clear', async () => ({ stdout: '', stderr: '', exitCode: 0 })),
+      // Add proxied curl when network is enabled
+      ...(withNetwork ? [createProxiedCurl()] : [])
     ]
-
-    if (withNetwork) {
-      customCommands.push(
-        defineCommand('curl', async (args, ctx) => {
-          const parsed = parseCurlArgs(args)
-          if (!parsed.ok) {
-            return { stdout: '', stderr: `${parsed.error}\n`, exitCode: 2 }
-          }
-
-          let { body } = parsed.value
-          const headers = { ...parsed.value.headers }
-
-          if (body?.startsWith('@')) {
-            const filePath = body.slice(1)
-            try {
-              const resolved = ctx.fs.resolvePath(ctx.cwd, filePath)
-              body = await ctx.fs.readFile(resolved)
-            } catch (error) {
-              return {
-                stdout: '',
-                stderr: `curl: ${filePath}: No such file or directory\n`,
-                exitCode: 1
-              }
-            }
-          }
-
-          if (body && !headers['content-type']) {
-            headers['content-type'] = 'application/x-www-form-urlencoded'
-          }
-
-          try {
-            const response = await fetch('/api/cli-proxy', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                url: parsed.value.url,
-                method: parsed.value.method,
-                headers,
-                body,
-                followRedirects: parsed.value.followRedirects
-              })
-            })
-
-            const data = (await response.json()) as {
-              ok: boolean
-              status: number
-              statusText: string
-              headers: Record<string, string>
-              body: string
-              url: string
-              error?: string
-            }
-
-            if (!response.ok || !data.ok) {
-              const message = data?.error ?? 'Proxy request failed'
-              return { stdout: '', stderr: `curl: ${message}\n`, exitCode: 1 }
-            }
-
-            const headerBlock = parsed.value.includeHeaders
-              ? formatHeaderBlock(data.status, data.statusText, data.headers)
-              : ''
-            const bodyOutput = parsed.value.method === 'HEAD' ? '' : (data.body ?? '')
-
-            return { stdout: `${headerBlock}${bodyOutput}`, stderr: '', exitCode: 0 }
-          } catch (error) {
-            const message = error instanceof Error ? error.message : String(error)
-            return { stdout: '', stderr: `curl: ${message}\n`, exitCode: 1 }
-          }
-        })
-      )
-    }
 
     return new Bash({
       customCommands,
+      // We don't need the built-in network config since our custom curl handles it
       files: {
         '/home/user/README.txt': [
           'Welcome to the in-memory shell.',
