@@ -69,7 +69,8 @@ export default defineConfig(config => {
         },
         sitemap: {
           enabled: true,
-          host: 'https://omar.mov'
+          host: 'https://omar.mov',
+          outputPath: './dist/sitemap.xml'
         }
       }),
       rollupPluginMdx(),

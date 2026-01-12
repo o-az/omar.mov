@@ -1,8 +1,8 @@
-import { fetchAllPosts } from '#lib/posts.ts'
-import { createFileRoute } from '@tanstack/solid-router'
 import { For } from 'solid-js'
+import { fetchAllPosts } from '#lib/posts.ts'
+import { createFileRoute, Link } from '@tanstack/solid-router'
 
-type Frontmatter = { title: string; slug: string }
+type Frontmatter = { title: string; slug: string; date: string }
 
 export const Route = createFileRoute('/posts/')({
   loader: async () => {
@@ -11,9 +11,13 @@ export const Route = createFileRoute('/posts/')({
     }
 
     const frontmatters: Array<Frontmatter> = []
-    for (const [, loader] of Object.entries(posts)) {
+    for (const [_slug, loader] of Object.entries(posts)) {
       const { frontmatter } = await loader()
-      frontmatters.push(frontmatter)
+
+      frontmatters.push({
+        ...frontmatter,
+        slug: _slug.replaceAll('/posts', '').replaceAll('/index.mdx', '').replaceAll('../', '')
+      })
     }
 
     return frontmatters
@@ -24,5 +28,17 @@ export const Route = createFileRoute('/posts/')({
 function RouteComponent() {
   const frontmatters = Route.useLoaderData()
 
-  return <For each={frontmatters()}>{item => <div>{item.title}</div>}</For>
+  return (
+    <For each={frontmatters()}>
+      {item => (
+        <div>
+          <Link
+            to={'/posts/$post'}
+            params={{ post: item.slug }}>
+            {item.title}
+          </Link>
+        </div>
+      )}
+    </For>
+  )
 }

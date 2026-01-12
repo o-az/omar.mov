@@ -31,8 +31,7 @@ AWS Lambda / Cloudflare Workers equivalent.
 ```ts
 import * as BunnySDK from "https://esm.sh/@bunny.net/edgescript-sdk"
 
-BunnySDK.net.http.serve(async (request: Request): Promise<Response> => {
-
+BunnySDK.net.http.serve(request => {
     return Response.redirect('https://example.com', 301)
 })
 ```
