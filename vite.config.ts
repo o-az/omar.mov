@@ -1,6 +1,6 @@
 import NodePath from 'node:path'
 import NodeProcess from 'node:process'
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv, type PluginOption } from 'vite'
 import VitePluginInfo from 'unplugin-info/vite'
 import nodePolyfills from 'rollup-plugin-node-polyfills'
 import { default as VitePluginSolid } from 'vite-plugin-solid'
@@ -8,12 +8,60 @@ import VitePluginDevtoolsJson from 'vite-plugin-devtools-json'
 import { default as VitePluginTailwindCSS } from '@tailwindcss/vite'
 import { cloudflare as VitePluginCloudflare } from '@cloudflare/vite-plugin'
 import { devtools as VitePluginTanstackDevtools } from '@tanstack/devtools-vite'
+import { default as VitePluginCloudflareTunnel } from 'unplugin-cloudflare-tunnel/vite'
 import { tanstackStart as VitePluginTanstackStart } from '@tanstack/solid-start/plugin/vite'
 
 import { rollupPluginMdx } from './markdown.config.ts'
 
 export default defineConfig(config => {
   const env = loadEnv(config.mode, NodeProcess.cwd(), '')
+
+  const plugins: Array<PluginOption> = [
+    nodePolyfills(),
+    VitePluginDevtoolsJson(),
+    VitePluginTanstackDevtools({
+      removeDevtoolsOnBuild: true,
+      eventBusConfig: {
+        port: randomIntInclusive(3_110, 8_110)
+      }
+    }),
+    VitePluginInfo({
+      cloudflare: true,
+      github: 'https://github.com/o-az/omar.mov'
+    }),
+    VitePluginCloudflare({
+      viteEnvironment: { name: 'ssr' }
+    }),
+    VitePluginTailwindCSS(),
+    VitePluginTanstackStart({
+      start: { entry: './src/start.ts' },
+      server: { entry: './src/server.ts' },
+      client: { entry: './src/client.ts' },
+      prerender: {
+        enabled: true,
+        crawlLinks: true
+      },
+      sitemap: {
+        enabled: true,
+        host: 'https://omar.mov'
+      }
+    }),
+    rollupPluginMdx(),
+    VitePluginSolid({ ssr: true })
+  ]
+
+  if (env?.ENABLE_CLOUDFLARE_TUNNEL === 'true')
+    plugins.push(
+      VitePluginCloudflareTunnel({
+        enabled: true,
+        ssl: '*.sauce.wiki',
+        tunnelName: 'omar-mov',
+        hostname: 'dev.sauce.wiki',
+        apiToken: env.CLOUDFLARE_API_KEY,
+        accountId: env.CLOUDFLARE_ACCOUNT_ID,
+        logFile: `./logs/${Date.now()}-cloudflare-tunnel.log`
+      })
+    )
 
   return {
     resolve: {
@@ -42,40 +90,7 @@ export default defineConfig(config => {
       target: 'esnext',
       emptyOutDir: true
     },
-    plugins: [
-      nodePolyfills(),
-      VitePluginDevtoolsJson(),
-      VitePluginTanstackDevtools({
-        removeDevtoolsOnBuild: true,
-        eventBusConfig: {
-          port: randomIntInclusive(3_110, 8_110)
-        }
-      }),
-      VitePluginInfo({
-        cloudflare: true,
-        github: 'https://github.com/o-az/omar.mov'
-      }),
-      VitePluginCloudflare({
-        viteEnvironment: { name: 'ssr' }
-      }),
-      VitePluginTailwindCSS(),
-      VitePluginTanstackStart({
-        start: { entry: './src/start.ts' },
-        server: { entry: './src/server.ts' },
-        client: { entry: './src/client.ts' },
-        prerender: {
-          enabled: true,
-          crawlLinks: true
-        },
-        sitemap: {
-          enabled: true,
-          host: 'https://omar.mov',
-          outputPath: './dist/sitemap.xml'
-        }
-      }),
-      rollupPluginMdx(),
-      VitePluginSolid({ ssr: true })
-    ]
+    plugins
   }
 })
 

@@ -2,22 +2,16 @@ import * as z from 'zod/mini'
 import { createFileRoute } from '@tanstack/solid-router'
 
 import { fetchAllPosts } from '#lib/posts.ts'
-import type { JSX } from 'solid-js/jsx-runtime'
 import { MDXProvider } from '#components/mdx.tsx'
 import markdownCss from '#style/markdown.css?url'
 import { CommentsSection } from '#components/comments.tsx'
 import { useMDXComponents } from '#lib/solid-jsx/jsx-runtime.ts'
 
-type MDXModule = {
-  default: (props: Record<string, unknown>) => JSX.Element
-  frontmatter?: Record<string, unknown>
-}
-
 export const Route = createFileRoute('/posts/$post')({
   component: RouteComponent,
   params: z.object({ post: z.string() }),
   loader: async ({ params }) => {
-    const posts = fetchAllPosts<MDXModule>({ eager: true })
+    const posts = fetchAllPosts({ eager: true })
 
     const { frontmatter, default: _ } = (posts[`../posts/${params.post}/index.mdx`] ||
       posts[`../posts/${params.post}.mdx`]) as unknown as {

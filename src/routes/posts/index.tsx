@@ -1,14 +1,12 @@
 import { For } from 'solid-js'
-import { fetchAllPosts } from '#lib/posts.ts'
 import { createFileRoute, Link } from '@tanstack/solid-router'
 
-type Frontmatter = { title: string; slug: string; date: string }
+import { fetchAllPosts } from '#lib/posts.ts'
+import type { Frontmatter } from '#lib/frontmatter.ts'
 
 export const Route = createFileRoute('/posts/')({
   loader: async () => {
-    const posts = fetchAllPosts() as {
-      [key: string]: () => Promise<{ frontmatter: Frontmatter }>
-    }
+    const posts = fetchAllPosts()
 
     const frontmatters: Array<Frontmatter> = []
     for (const [_slug, loader] of Object.entries(posts)) {

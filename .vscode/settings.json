@@ -49,7 +49,7 @@
   },
   "files.exclude": {
     ".zed": true,
-    "opensrc": true,
+    // "opensrc": true,
     ".claude": true,
     ".wrangler": true,
     ".tanstack": true,

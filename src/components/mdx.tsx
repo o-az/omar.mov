@@ -6,7 +6,7 @@ import { MDXProvider as SolidMDXProvider } from '#lib/solid-jsx/jsx-runtime.ts'
 
 export type MDXModule = {
   default: () => unknown
-  frontmatter: Frontmatter.Frontmatter
+  frontmatter: Frontmatter
 }
 
 export function MDXProvider(props: { children: JSX.Element }) {
@@ -23,7 +23,7 @@ export function MDXProvider(props: { children: JSX.Element }) {
       }}>
       <article
         class={cx(
-          'max-w-[680px] mx-auto prose dark:prose-invert',
+          'max-w-170 mx-auto prose dark:prose-invert',
           'prose-img:rounded-xl prose-img:my-3 prose-img:py-4 prose-img:mb-6'
         )}>
         {props.children}

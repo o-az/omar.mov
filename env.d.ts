@@ -6,6 +6,10 @@ interface Env {
 
   readonly APP_VERSION: string
 
+  readonly CLOUDFLARE_API_KEY: string
+  readonly CLOUDFLARE_ACCOUNT_ID: string
+  readonly ENABLE_CLOUDFLARE_TUNNEL: string
+
   readonly VITE_UTTERANCES_REPO?: string
   readonly VITE_UTTERANCES_LABEL?: string
   readonly VITE_UTTERANCES_THEME?: string
