@@ -71,10 +71,10 @@ function RootDocument({ children }: { children: Solid.JSX.Element }) {
       lang='en'
       class="h-full cursor-[url('/icons/cursor.png'),pointer]">
       <head>
+        <HeadContent />
         <HydrationScript />
       </head>
       <body class='size-full bg-[#121212] p-6 text-white selection:bg-fuchsia-300 selection:text-black flex min-h-screen flex-col'>
-        <HeadContent />
         {children}
         <DevTools />
         <Scripts />
