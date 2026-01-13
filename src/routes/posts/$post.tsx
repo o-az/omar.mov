@@ -1,4 +1,5 @@
 import * as z from 'zod/mini'
+import { createServerFn } from '@tanstack/solid-start'
 import { createFileRoute } from '@tanstack/solid-router'
 
 import { fetchAllPosts } from '#lib/posts.ts'
@@ -7,35 +8,55 @@ import markdownCss from '#style/markdown.css?url'
 import { CommentsSection } from '#components/comments.tsx'
 import { useMDXComponents } from '#lib/solid-jsx/jsx-runtime.ts'
 
-export const Route = createFileRoute('/posts/$post')({
-  component: RouteComponent,
-  params: z.object({ post: z.string() }),
-  loader: async ({ params }) => {
+type PostFrontmatter = {
+  title?: string
+  date?: string
+  description?: string
+}
+
+type PostContent = {
+  content: string
+  frontmatter: PostFrontmatter
+}
+
+const getPostContent = createServerFn({ method: 'GET' })
+  .inputValidator((postSlug: string) => postSlug)
+  .handler(async ({ data: postSlug }): Promise<PostContent> => {
     const posts = fetchAllPosts({ eager: true })
 
-    const { frontmatter, default: _ } = (posts[`../posts/${params.post}/index.mdx`] ||
-      posts[`../posts/${params.post}.mdx`]) as unknown as {
-      frontmatter: Record<string, unknown>
-      default: (props: Record<string, unknown>) => Array<{ t: string }>
+    const post = (posts[`../posts/${postSlug}/index.mdx`] || posts[`../posts/${postSlug}.mdx`]) as
+      | {
+          frontmatter: PostFrontmatter
+          default: (props: Record<string, unknown>) => Array<{ t: string }>
+        }
+      | undefined
+
+    if (!post) {
+      throw new Error(`Post not found: ${postSlug}`)
     }
 
+    const { frontmatter, default: renderMdx } = post
+
     return {
-      content: _({})
-        .map(_ => _.t)
+      content: renderMdx({})
+        .map(item => item.t)
         .filter(Boolean)
         .join(''),
       frontmatter
     }
-  },
+  })
+
+export const Route = createFileRoute('/posts/$post')({
+  component: RouteComponent,
+  params: z.object({ post: z.string() }),
+  loader: async ({ params }) => getPostContent({ data: params.post }),
   head: ({ loaderData, params }) => {
-    const fm = loaderData?.frontmatter as
-      | { title?: string; date?: string; description?: string }
-      | undefined
+    const frontmatter = loaderData?.frontmatter
     return {
       meta: [
-        { title: fm?.title ?? params.post },
-        { name: 'description', content: fm?.description ?? '' },
-        { name: 'article:published_time', content: fm?.date ?? '' }
+        { title: frontmatter?.title ?? params.post },
+        { name: 'description', content: frontmatter?.description ?? '' },
+        { name: 'article:published_time', content: frontmatter?.date ?? '' }
       ],
       links: [
         { rel: 'stylesheet', href: markdownCss },
@@ -48,14 +69,14 @@ export const Route = createFileRoute('/posts/$post')({
           children: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Article',
-            headline: fm?.title,
-            description: fm?.description,
+            headline: frontmatter?.title,
+            description: frontmatter?.description,
             publisher: {
               '@type': 'Organization',
               name: 'omar.mov',
               logo: { '@type': 'ImageObject', url: 'https://omar.mov/logo.png' }
             },
-            datePublished: fm?.date
+            datePublished: frontmatter?.date
           })
         }
       ]
