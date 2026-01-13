@@ -1,33 +1,16 @@
 import { For } from 'solid-js'
 import { createFileRoute, Link } from '@tanstack/solid-router'
+// import { MDXContent } from '@content-collections/mdx'
 
-import { fetchAllPosts } from '#lib/posts.ts'
-import type { Frontmatter } from '#lib/frontmatter.ts'
+import { allPosts } from '#content-collections'
 
 export const Route = createFileRoute('/posts/')({
-  loader: async () => {
-    const posts = fetchAllPosts()
-
-    const frontmatters: Array<Frontmatter> = []
-    for (const [_slug, loader] of Object.entries(posts)) {
-      const { frontmatter } = await loader()
-
-      frontmatters.push({
-        ...frontmatter,
-        slug: _slug.replaceAll('/posts', '').replaceAll('/index.mdx', '').replaceAll('../', '')
-      })
-    }
-
-    return frontmatters
-  },
   component: RouteComponent
 })
 
 function RouteComponent() {
-  const frontmatters = Route.useLoaderData()
-
   return (
-    <For each={frontmatters()}>
+    <For each={allPosts}>
       {item => (
         <div>
           <Link
