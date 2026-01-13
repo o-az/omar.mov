@@ -1,20 +1,34 @@
+import * as z from 'zod/mini'
 import NodePath from 'node:path'
 import NodeProcess from 'node:process'
-import { defineConfig, loadEnv, type PluginOption } from 'vite'
 import VitePluginInfo from 'unplugin-info/vite'
 import nodePolyfills from 'rollup-plugin-node-polyfills'
 import { default as VitePluginSolid } from 'vite-plugin-solid'
 import VitePluginDevtoolsJson from 'vite-plugin-devtools-json'
+import { defineConfig, loadEnv, type PluginOption } from 'vite'
+import { default as VitePluginInspect } from 'vite-plugin-inspect'
 import { default as VitePluginTailwindCSS } from '@tailwindcss/vite'
 import { cloudflare as VitePluginCloudflare } from '@cloudflare/vite-plugin'
 import { devtools as VitePluginTanstackDevtools } from '@tanstack/devtools-vite'
+import { default as VitePluginContentCollection } from '@content-collections/vite'
 import { default as VitePluginCloudflareTunnel } from 'unplugin-cloudflare-tunnel/vite'
 import { tanstackStart as VitePluginTanstackStart } from '@tanstack/solid-start/plugin/vite'
 
-import { rollupPluginMdx } from './markdown.config.ts'
+const enabledSchema = z.stringbool({
+  truthy: ['true', '1', 'yes', 'on', 'y', 'enabled'],
+  falsy: ['false', '0', 'no', 'off', 'n', 'disabled']
+})
+
+const devFlagsSchema = z.object({
+  VITE_ENABLE_INSPECT: z.prefault(enabledSchema, 'false'),
+  VITE_ENABLE_CLOUDFLARE_TUNNEL: z.prefault(enabledSchema, 'false')
+})
 
 export default defineConfig(config => {
   const env = loadEnv(config.mode, NodeProcess.cwd(), '')
+
+  const { data: devFlags, success, error } = devFlagsSchema.safeParse(env)
+  if (!success) throw new Error(`Invalid dev flags - ${z.prettifyError(error)}`)
 
   const plugins: Array<PluginOption> = [
     nodePolyfills(),
@@ -28,6 +42,9 @@ export default defineConfig(config => {
     VitePluginInfo({
       cloudflare: true,
       github: 'https://github.com/o-az/omar.mov'
+    }),
+    VitePluginContentCollection({
+      configPath: NodePath.resolve(import.meta.dirname, 'src/lib/content-collections.ts')
     }),
     VitePluginCloudflare({
       viteEnvironment: { name: 'ssr' }
@@ -46,11 +63,10 @@ export default defineConfig(config => {
         host: 'https://omar.mov'
       }
     }),
-    rollupPluginMdx(),
     VitePluginSolid({ ssr: true })
   ]
 
-  if (env?.ENABLE_CLOUDFLARE_TUNNEL === 'true')
+  if (devFlags.VITE_ENABLE_CLOUDFLARE_TUNNEL)
     plugins.push(
       VitePluginCloudflareTunnel({
         enabled: true,
@@ -63,32 +79,29 @@ export default defineConfig(config => {
       })
     )
 
+  if (devFlags.VITE_ENABLE_INSPECT) plugins.push(VitePluginInspect())
+
   return {
     resolve: {
       alias: {
-        '#': NodePath.resolve(import.meta.dirname, 'src'),
-        'solid-jsx/jsx-runtime': NodePath.resolve(
-          import.meta.dirname,
-          'src/lib/solid-jsx/jsx-runtime.ts'
-        ),
-        'solid-jsx/jsx-dev-runtime': NodePath.resolve(
-          import.meta.dirname,
-          'src/lib/solid-jsx/jsx-dev-runtime.ts'
-        ),
-        'solid-jsx': NodePath.resolve(import.meta.dirname, 'src/lib/solid-jsx/jsx-runtime.ts')
+        '#': NodePath.resolve(import.meta.dirname, 'src')
       }
-    },
-    optimizeDeps: {
-      exclude: ['solid-jsx'],
-      entries: ['./src/**/*.{ts,tsx}']
     },
     server: {
       port: Number(env.PORT || randomIntInclusive(3_100, 8_100))
     },
+    oxc: {
+      target: 'esnext'
+    },
     build: {
-      minify: false,
+      minify: 'oxc',
       target: 'esnext',
-      emptyOutDir: true
+      emptyOutDir: true,
+      rolldownOptions: {
+        experimental: {
+          nativeMagicString: true
+        }
+      }
     },
     plugins
   }

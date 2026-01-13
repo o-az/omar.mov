@@ -3,6 +3,7 @@
 ## **IMPORTANT**
 
 - after any code changes, run `bun check && bun check:types` to ensure there are no lint-errors and type-errors.
+- do not use abbreviations. For example, instead of `ctx`, `evt`, `e`, `btn`, use `context`, `event`, `error`, `button`.
 
 ## Commands
 
@@ -33,7 +34,7 @@
 
 - `zod/mini` for type checking (import using `import * as z from 'zod/mini'`)
 
-## Code Style (Biome)
+## Code Style
 
 - 2-space indentation, 100-char line width
 - Single quotes, no semicolons, no trailing commas
@@ -43,3 +44,15 @@
 - Prefer kebab-case for file names
 - Strict TypeScript: `strictNullChecks`, `noUncheckedIndexedAccess`
 - JSX uses `solid-js` pragma, single quotes in JSX attributes
+- Sort import in two sections, external and local - separated by 1 empty line
+- each import section should be sorted by shortest first, e.g.,
+  
+  ```tsx
+  import foo from 'some-foo'
+  import fooBar from 'some-foo-bar'
+  import fooBarBaz from 'some-foo-bar-baz'
+
+  import localFoo from '#local-foo'
+  import localFooBar from '#local-foo-bar'
+  import localFooBarBaz from '#local-foo-bar-baz'
+  ```
