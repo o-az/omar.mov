@@ -1,10 +1,9 @@
 import * as z from 'zod/mini'
 import { createFileRoute, notFound } from '@tanstack/solid-router'
 
-import { allPosts } from '#content-collections'
-import markdownCss from '#style/markdown.css?url'
-import { CommentsSection } from '#components/comments.tsx'
 import { cx } from '#lib/style.ts'
+import { allPosts } from '#content-collections'
+import { CommentsSection } from '#components/comments.tsx'
 
 export const Route = createFileRoute('/posts/$post')({
   component: RouteComponent,
@@ -23,11 +22,7 @@ export const Route = createFileRoute('/posts/$post')({
         { name: 'description', content: frontmatter?.description ?? '' },
         { name: 'article:published_time', content: frontmatter?.date ?? '' }
       ],
-      links: [
-        { rel: 'stylesheet', href: markdownCss },
-        { rel: 'canonical', href: `https://omar.mov/posts/${params.post}` },
-        { rel: 'stylesheet', href: 'https://esm.sh/katex/dist/katex.min.css' }
-      ],
+      links: [{ rel: 'canonical', href: `https://omar.mov/posts/${params.post}` }],
       scripts: [
         {
           type: 'application/ld+json',
