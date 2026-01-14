@@ -63,8 +63,8 @@ function RouteComponent() {
                 <a
                   target='_blank'
                   href={social.url}
-                  rel='noopener noreferrer'
-                  class='text-blue-300'>
+                  class='text-blue-300'
+                  rel='noopener noreferrer'>
                   {social.label}
                 </a>
               </li>
@@ -73,10 +73,10 @@ function RouteComponent() {
           <li>
             <button
               type='button'
-              class='[anchor-name:--email-anchor]'
               data-button='email'
-              popovertarget='email-popover'
               popovertargetaction='toggle'
+              popovertarget='email-popover'
+              class='[anchor-name:--email-anchor]'
               onClick={() => navigator.clipboard.writeText('gm@omar.mov')}>
               gm@omar.mov
             </button>
@@ -90,6 +90,11 @@ function RouteComponent() {
           </li>
         </ul>
       </nav>
+      <Link
+        to='/posts'
+        class='bottom-0 right-0 absolute px-4 pb-2 text-transparent hover:text-yellow-300'>
+        posts
+      </Link>
     </main>
   )
 }

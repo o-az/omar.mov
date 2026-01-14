@@ -1,3 +1,5 @@
+import '#style/markdown.css'
+
 import * as z from 'zod/mini'
 import { createFileRoute, notFound } from '@tanstack/solid-router'
 
@@ -5,11 +7,11 @@ import { cx } from '#lib/style.ts'
 import { allPosts } from '#content-collections'
 import { CommentsSection } from '#components/comments.tsx'
 
-export const Route = createFileRoute('/posts/$post')({
+export const Route = createFileRoute('/posts/$id')({
   component: RouteComponent,
-  params: z.object({ post: z.string() }),
+  params: z.object({ id: z.string() }),
   loader: async ({ params }) => {
-    const post = allPosts.find(post => post.slug === params.post)
+    const post = allPosts.find(post => post.slug === params.id)
 
     if (!post) throw notFound()
 
@@ -18,11 +20,14 @@ export const Route = createFileRoute('/posts/$post')({
   head: ({ loaderData: frontmatter, params }) => {
     return {
       meta: [
-        { title: frontmatter?.title ?? params.post },
+        { title: frontmatter?.title ?? params.id },
         { name: 'description', content: frontmatter?.description ?? '' },
         { name: 'article:published_time', content: frontmatter?.date ?? '' }
       ],
-      links: [{ rel: 'canonical', href: `https://omar.mov/posts/${params.post}` }],
+      links: [
+        { rel: 'canonical', href: `https://omar.mov/posts/${params.id}` },
+        { rel: 'stylesheet', href: 'https://esm.sh/katex/dist/katex.min.css' }
+      ],
       scripts: [
         {
           type: 'application/ld+json',
@@ -58,7 +63,7 @@ function RouteComponent() {
         )}
         innerHTML={post.html}
       />
-      <CommentsSection slug={params().post} />
+      <CommentsSection slug={params().id} />
     </main>
   )
 }

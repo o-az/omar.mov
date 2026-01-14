@@ -1,11 +1,16 @@
+import '#style/markdown.css'
+
 import { For } from 'solid-js'
 import { createFileRoute, Link } from '@tanstack/solid-router'
-// import { MDXContent } from '@content-collections/mdx'
 
 import { allPosts } from '#content-collections'
 
 export const Route = createFileRoute('/posts/')({
-  component: RouteComponent
+  ssr: true,
+  component: RouteComponent,
+  head: () => ({
+    links: [{ rel: 'stylesheet', href: 'https://esm.sh/katex/dist/katex.min.css' }]
+  })
 })
 
 function RouteComponent() {
@@ -14,8 +19,9 @@ function RouteComponent() {
       {item => (
         <div>
           <Link
-            to={'/posts/$post'}
-            params={{ post: item.slug }}>
+            preload='render'
+            to={'/posts/$id'}
+            params={{ id: item.slug }}>
             {item.title}
           </Link>
         </div>
