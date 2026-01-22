@@ -92,7 +92,7 @@ function RouteComponent() {
       </nav>
       <Link
         to='/posts'
-        class='bottom-0 right-0 absolute px-4 pb-2 text-transparent hover:text-yellow-300'>
+        class='bottom-0 right-0 absolute px-4 pb-2 text-transparent hover:text-yellow-300 invisible hover:visible'>
         posts
       </Link>
     </main>

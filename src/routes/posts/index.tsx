@@ -15,15 +15,23 @@ export const Route = createFileRoute('/posts/')({
 
 function RouteComponent() {
   return (
-    <For each={allPosts}>
+    <For each={allPosts.filter(item => !item.draft)}>
       {item => (
-        <div>
+        <div class='py-2'>
           <Link
             preload='render'
             to={'/posts/$id'}
             params={{ id: item.slug }}>
-            {item.title}
+            <span class='text-neutral-500 text-sm mr-2'>
+              {new Date(item.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              })}
+            </span>
+            <span>{item.title}</span>
           </Link>
+          <p class='text-neutral-400 text-sm mt-1'>{item.description}</p>
         </div>
       )}
     </For>
