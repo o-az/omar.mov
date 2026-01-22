@@ -2,7 +2,7 @@
 
 ## **IMPORTANT**
 
-- after any code changes, run `bun check && bun check:types` to ensure there are no lint-errors and type-errors.
+- after any code changes, run `bun check && bun check:types` to ensure there are no lint or type errors.
 - do not use abbreviations. For example, instead of `ctx`, `evt`, `e`, `btn`, use `context`, `event`, `error`, `button`.
 
 ## Commands
@@ -15,6 +15,8 @@
 
 ## Architecture
 
+- **Server-Side JavaScript Runtimes**:
+  - Cloudflare Workers: <https://developers.cloudflare.com/llms.txt>
 - **Meta-Framework**:
   - TanStack Start: <https://context7.com/websites/tanstack_start/llms.txt?tokens=1000000>
   - TanStack Router: <https://context7.com/websites/tanstack_router/llms.txt?tokens=1000000>
@@ -22,8 +24,6 @@
   - Solid.js: <https://docs.solidjs.com/llms.txt>
 - **Styling**:
   - Tailwind CSS v4: <https://context7.com/websites/tailwindcss/llms.txt?tokens=1000000>
-- **Deployment**:
-  - Cloudflare Workers (via Vite plugin): <https://developers.cloudflare.com/llms.txt>
 - **Structure**:
   - `src/routes/`: file-based routing
   - `src/posts/`: writings

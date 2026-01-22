@@ -81,6 +81,7 @@ export default defineConfig(config => {
 
   if (devFlags.VITE_ENABLE_INSPECT) plugins.push(VitePluginInspect())
 
+  const allowedHosts = config.mode === 'development' ? (env?.ALLOWED_HOSTS?.split(',') ?? []) : []
   return {
     resolve: {
       alias: {
@@ -88,6 +89,7 @@ export default defineConfig(config => {
       }
     },
     server: {
+      allowedHosts,
       port: Number(env.PORT || randomIntInclusive(3_100, 8_100))
     },
     oxc: {
