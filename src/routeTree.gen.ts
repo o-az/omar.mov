@@ -13,8 +13,10 @@ import { Route as PostsRouteRouteImport } from './routes/posts/route'
 import { Route as CliRouteRouteImport } from './routes/cli/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PostsIndexRouteImport } from './routes/posts/index'
+import { Route as PostsChar123slugChar125DotmdRouteImport } from './routes/posts/{$slug}[.]md'
 import { Route as PostsIdRouteImport } from './routes/posts/$id'
 import { Route as ApiCliProxyRouteImport } from './routes/api/cli-proxy'
+import { Route as ApiAgentXRouteImport } from './routes/api/agent/$x'
 
 const PostsRouteRoute = PostsRouteRouteImport.update({
   id: '/posts',
@@ -36,6 +38,12 @@ const PostsIndexRoute = PostsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PostsRouteRoute,
 } as any)
+const PostsChar123slugChar125DotmdRoute =
+  PostsChar123slugChar125DotmdRouteImport.update({
+    id: '/{$slug}.md',
+    path: '/{$slug}.md',
+    getParentRoute: () => PostsRouteRoute,
+  } as any)
 const PostsIdRoute = PostsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -46,6 +54,11 @@ const ApiCliProxyRoute = ApiCliProxyRouteImport.update({
   path: '/api/cli-proxy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAgentXRoute = ApiAgentXRouteImport.update({
+  id: '/api/agent/$x',
+  path: '/api/agent/$x',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -53,14 +66,18 @@ export interface FileRoutesByFullPath {
   '/posts': typeof PostsRouteRouteWithChildren
   '/api/cli-proxy': typeof ApiCliProxyRoute
   '/posts/$id': typeof PostsIdRoute
+  '/posts/{$slug}.md': typeof PostsChar123slugChar125DotmdRoute
   '/posts/': typeof PostsIndexRoute
+  '/api/agent/$x': typeof ApiAgentXRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cli': typeof CliRouteRoute
   '/api/cli-proxy': typeof ApiCliProxyRoute
   '/posts/$id': typeof PostsIdRoute
+  '/posts/{$slug}.md': typeof PostsChar123slugChar125DotmdRoute
   '/posts': typeof PostsIndexRoute
+  '/api/agent/$x': typeof ApiAgentXRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -69,7 +86,9 @@ export interface FileRoutesById {
   '/posts': typeof PostsRouteRouteWithChildren
   '/api/cli-proxy': typeof ApiCliProxyRoute
   '/posts/$id': typeof PostsIdRoute
+  '/posts/{$slug}.md': typeof PostsChar123slugChar125DotmdRoute
   '/posts/': typeof PostsIndexRoute
+  '/api/agent/$x': typeof ApiAgentXRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -79,9 +98,18 @@ export interface FileRouteTypes {
     | '/posts'
     | '/api/cli-proxy'
     | '/posts/$id'
+    | '/posts/{$slug}.md'
     | '/posts/'
+    | '/api/agent/$x'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cli' | '/api/cli-proxy' | '/posts/$id' | '/posts'
+  to:
+    | '/'
+    | '/cli'
+    | '/api/cli-proxy'
+    | '/posts/$id'
+    | '/posts/{$slug}.md'
+    | '/posts'
+    | '/api/agent/$x'
   id:
     | '__root__'
     | '/'
@@ -89,7 +117,9 @@ export interface FileRouteTypes {
     | '/posts'
     | '/api/cli-proxy'
     | '/posts/$id'
+    | '/posts/{$slug}.md'
     | '/posts/'
+    | '/api/agent/$x'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -97,6 +127,7 @@ export interface RootRouteChildren {
   CliRouteRoute: typeof CliRouteRoute
   PostsRouteRoute: typeof PostsRouteRouteWithChildren
   ApiCliProxyRoute: typeof ApiCliProxyRoute
+  ApiAgentXRoute: typeof ApiAgentXRoute
 }
 
 declare module '@tanstack/solid-router' {
@@ -129,6 +160,13 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof PostsIndexRouteImport
       parentRoute: typeof PostsRouteRoute
     }
+    '/posts/{$slug}.md': {
+      id: '/posts/{$slug}.md'
+      path: '/{$slug}.md'
+      fullPath: '/posts/{$slug}.md'
+      preLoaderRoute: typeof PostsChar123slugChar125DotmdRouteImport
+      parentRoute: typeof PostsRouteRoute
+    }
     '/posts/$id': {
       id: '/posts/$id'
       path: '/$id'
@@ -143,16 +181,25 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof ApiCliProxyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/agent/$x': {
+      id: '/api/agent/$x'
+      path: '/api/agent/$x'
+      fullPath: '/api/agent/$x'
+      preLoaderRoute: typeof ApiAgentXRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface PostsRouteRouteChildren {
   PostsIdRoute: typeof PostsIdRoute
+  PostsChar123slugChar125DotmdRoute: typeof PostsChar123slugChar125DotmdRoute
   PostsIndexRoute: typeof PostsIndexRoute
 }
 
 const PostsRouteRouteChildren: PostsRouteRouteChildren = {
   PostsIdRoute: PostsIdRoute,
+  PostsChar123slugChar125DotmdRoute: PostsChar123slugChar125DotmdRoute,
   PostsIndexRoute: PostsIndexRoute,
 }
 
@@ -165,6 +212,7 @@ const rootRouteChildren: RootRouteChildren = {
   CliRouteRoute: CliRouteRoute,
   PostsRouteRoute: PostsRouteRouteWithChildren,
   ApiCliProxyRoute: ApiCliProxyRoute,
+  ApiAgentXRoute: ApiAgentXRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
