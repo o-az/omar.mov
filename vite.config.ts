@@ -31,6 +31,9 @@ export default defineConfig(config => {
   if (!success) throw new Error(`Invalid dev flags - ${z.prettifyError(error)}`)
 
   const plugins: Array<PluginOption> = [
+    VitePluginCloudflare({
+      viteEnvironment: { name: 'ssr' }
+    }),
     nodePolyfills(),
     VitePluginDevtoolsJson(),
     VitePluginTanstackDevtools({
@@ -46,18 +49,11 @@ export default defineConfig(config => {
     VitePluginContentCollection({
       configPath: NodePath.resolve(import.meta.dirname, 'src/lib/content-collections.ts')
     }),
-    VitePluginCloudflare({
-      viteEnvironment: { name: 'ssr' }
-    }),
     VitePluginTailwindCSS(),
     VitePluginTanstackStart({
       start: { entry: './src/start.ts' },
       server: { entry: './src/server.ts' },
       client: { entry: './src/client.ts' },
-      prerender: {
-        enabled: true,
-        crawlLinks: true
-      },
       sitemap: {
         enabled: true,
         host: 'https://omar.mov'
@@ -92,11 +88,7 @@ export default defineConfig(config => {
       allowedHosts,
       port: Number(env.PORT || randomIntInclusive(3_100, 8_100))
     },
-    oxc: {
-      target: 'esnext'
-    },
     build: {
-      minify: 'oxc',
       target: 'esnext',
       emptyOutDir: true,
       rolldownOptions: {

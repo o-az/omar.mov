@@ -1,11 +1,20 @@
 @import "#style/tw.css";
 
 @font-face {
+  font-family: "Lilex Fallback";
+  src: local("SF Mono"), local("Monaco"), local("Menlo"), local("Consolas"), local("monospace");
+  ascent-override: 100%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
+}
+
+@font-face {
   font-family: "Lilex";
   src: url("/fonts/Lilex.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -13,11 +22,11 @@
   src: url("/fonts/Lilex-Italic.woff2") format("woff2");
   font-weight: 100 900;
   font-style: italic;
-  font-display: swap;
+  font-display: optional;
 }
 
 @theme {
-  --font-display: "Lilex", "sans-serif";
+  --font-display: "Lilex", "Lilex Fallback", sans-serif;
 }
 
 @custom-variant data-checked (&[data-ui~="checked"]);

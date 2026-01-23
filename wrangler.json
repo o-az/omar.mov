@@ -1,7 +1,7 @@
 {
   "$schema": "https://esm.sh/wrangler/config-schema.json",
   "name": "omar-mov",
-  "compatibility_date": "2026-01-01",
+  "compatibility_date": "2026-01-20",
   "compatibility_flags": [
     "nodejs_compat"
   ],
@@ -9,6 +9,36 @@
   "keep_vars": true,
   "workers_dev": true,
   "preview_urls": true,
+  "ai": {
+    "binding": "AI"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "AGENT_DO",
+        "class_name": "AgentDO"
+      },
+      {
+        "name": "LIVE_VIEWERS_DO",
+        "class_name": "LiveViewersDO"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "AgentDO"
+      ]
+    },
+    {
+      "tag": "v2",
+      "new_classes": [
+        "LiveViewersDO"
+      ]
+    }
+  ],
+
   "observability": {
     "enabled": true,
     "logs": {
