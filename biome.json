@@ -20,8 +20,8 @@
       "**",
       "!_",
       "src/**",
-      "!src/routeTree.gen.ts",
       "!node_modules",
+      "!src/routeTree.gen.ts",
       "!worker-configuration.d.ts"
     ],
     "ignoreUnknown": true
@@ -54,8 +54,8 @@
     "includes": [
       "**",
       "!_",
-      "!src/routeTree.gen.ts",
-      "!bun.lock"
+      "!bun.lock",
+      "!src/routeTree.gen.ts"
     ]
   },
   "linter": {
@@ -102,6 +102,7 @@
     }
   },
   "javascript": {
+    "jsxRuntime": "transparent",
     "assist": {
       "enabled": true
     },
@@ -159,7 +160,11 @@
       "@theme"
     ],
     "formatter": {
-      "enabled": true
+      "enabled": true,
+      "indentWidth": 2,
+      "lineWidth": 100,
+      "indentStyle": "space",
+      "quoteStyle": "single"
     }
   },
   "overrides": [
