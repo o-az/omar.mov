@@ -2,7 +2,7 @@ import * as z from 'zod/mini'
 import NodePath from 'node:path'
 import NodeProcess from 'node:process'
 import VitePluginInfo from 'unplugin-info/vite'
-import nodePolyfills from 'rollup-plugin-node-polyfills'
+import nodePolyfills from '@rolldown/plugin-node-polyfills'
 import { default as VitePluginSolid } from 'vite-plugin-solid'
 import VitePluginDevtoolsJson from 'vite-plugin-devtools-json'
 import { defineConfig, loadEnv, type PluginOption } from 'vite'
@@ -13,6 +13,8 @@ import { devtools as VitePluginTanstackDevtools } from '@tanstack/devtools-vite'
 import { default as VitePluginContentCollection } from '@content-collections/vite'
 import { default as VitePluginCloudflareTunnel } from 'unplugin-cloudflare-tunnel/vite'
 import { tanstackStart as VitePluginTanstackStart } from '@tanstack/solid-start/plugin/vite'
+
+import { esmExternalRequirePlugin } from 'rolldown/plugins'
 
 const enabledSchema = z.stringbool({
   truthy: ['true', '1', 'yes', 'on', 'y', 'enabled'],
@@ -31,7 +33,9 @@ export default defineConfig(config => {
   if (!success) throw new Error(`Invalid dev flags - ${z.prettifyError(error)}`)
 
   const plugins: Array<PluginOption> = [
-    nodePolyfills(),
+    VitePluginCloudflare({
+      viteEnvironment: { name: 'ssr' }
+    }),
     VitePluginDevtoolsJson(),
     VitePluginTanstackDevtools({
       removeDevtoolsOnBuild: true,
@@ -46,22 +50,11 @@ export default defineConfig(config => {
     VitePluginContentCollection({
       configPath: NodePath.resolve(import.meta.dirname, 'src/lib/content-collections.ts')
     }),
-    VitePluginCloudflare({
-      viteEnvironment: { name: 'ssr' }
-    }),
     VitePluginTailwindCSS(),
     VitePluginTanstackStart({
       start: { entry: './src/start.ts' },
       server: { entry: './src/server.ts' },
-      client: { entry: './src/client.ts' },
-      prerender: {
-        enabled: true,
-        crawlLinks: true
-      },
-      sitemap: {
-        enabled: true,
-        host: 'https://omar.mov'
-      }
+      client: { entry: './src/client.ts' }
     }),
     VitePluginSolid({ ssr: true })
   ]
@@ -92,14 +85,17 @@ export default defineConfig(config => {
       allowedHosts,
       port: Number(env.PORT || randomIntInclusive(3_100, 8_100))
     },
-    oxc: {
-      target: 'esnext'
-    },
     build: {
-      minify: 'oxc',
       target: 'esnext',
       emptyOutDir: true,
       rolldownOptions: {
+        shimMissingExports: true,
+        plugins: [
+          nodePolyfills(),
+          esmExternalRequirePlugin({
+            external: ['os', 'fs', 'path', 'util', 'stream', 'events', 'process']
+          })
+        ],
         experimental: {
           nativeMagicString: true
         }

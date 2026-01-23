@@ -24,6 +24,20 @@ export const Route = createRootRoute({
       { name: 'robots', content: 'index, follow' }
     ],
     links: [
+      {
+        rel: 'preload',
+        href: '/fonts/Lilex.woff2',
+        as: 'font',
+        type: 'font/woff2',
+        crossorigin: ''
+      },
+      {
+        rel: 'preload',
+        href: '/fonts/Lilex-Italic.woff2',
+        as: 'font',
+        type: 'font/woff2',
+        crossorigin: ''
+      },
       { rel: 'stylesheet', href: appCss },
       {
         rel: 'icon',
@@ -69,12 +83,27 @@ function RootDocument({ children }: { children: Solid.JSX.Element }) {
   return (
     <html
       lang='en'
-      class="h-full cursor-[url('/icons/cursor.png'),pointer]">
+      class='min-h-screen'>
       <head>
         <HeadContent />
         <HydrationScript />
+        <style
+          innerHTML={`
+          .fonts-loading { opacity: 0; }
+          .fonts-loaded { opacity: 1; transition: opacity 0.1s; }
+        `}
+        />
+        <script
+          innerHTML={`
+          document.documentElement.classList.add('fonts-loading');
+          document.fonts.ready.then(() => {
+            document.documentElement.classList.remove('fonts-loading');
+            document.documentElement.classList.add('fonts-loaded');
+          });
+        `}
+        />
       </head>
-      <body class='size-full bg-[#121212] p-6 text-white selection:bg-fuchsia-300 selection:text-black flex min-h-screen flex-col'>
+      <body class='size-full bg-[#121212] p-4 text-white selection:bg-fuchsia-300 selection:text-black flex min-h-screen flex-col'>
         {children}
         <DevTools />
         <Scripts />

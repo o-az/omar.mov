@@ -2,6 +2,8 @@ import { For, onMount } from 'solid-js'
 import { PowerGlitch } from 'powerglitch'
 import { createFileRoute, Link } from '@tanstack/solid-router'
 
+import { LiveViewers } from '#components/live-viewers.tsx'
+
 export const Route = createFileRoute('/')({
   ssr: true,
   component: RouteComponent
@@ -35,24 +37,26 @@ function RouteComponent() {
   })
 
   return (
-    <main class='size-full font-[Lilex]'>
+    <main class='size-full font-display'>
+      <Link
+        to='/posts'
+        class='text-transparent hover:text-yellow-300 absolute top-0 right-0 p-2 opacity-5 hover:opacity-100'>
+        posts
+      </Link>
       <header class='flex items-center justify-between'>
-        <h1 class='text-3xl font-bold'>omar aziz</h1>
-        <Link
-          to='/posts'
-          class='text-sm hidden invisible'>
-          writings
-        </Link>
+        <h1 class='text-3xl font-bold leading-tight'>omar aziz</h1>
       </header>
-      <p class='text-lg'>
+      <p class='text-lg leading-normal'>
         software engineer @{' '}
-        <a
-          target='_blank'
-          href='https://tempo.xyz'
-          rel='noopener noreferrer'
-          class='text-blue-300 glitch'>
-          tempo.xyz
-        </a>
+        <span class='inline-grid'>
+          <a
+            target='_blank'
+            href='https://tempo.xyz'
+            rel='noopener noreferrer'
+            class='text-blue-300 glitch [grid-area:1/1/-1/-1]'>
+            tempo.xyz
+          </a>
+        </span>
       </p>
       <nav class='mt-3 text-lg'>
         <p class='mb-1 font-semibold'>socials</p>
@@ -90,11 +94,9 @@ function RouteComponent() {
           </li>
         </ul>
       </nav>
-      <Link
-        to='/posts'
-        class='bottom-0 right-0 absolute px-4 pb-2 text-transparent hover:text-yellow-300 invisible hover:visible'>
-        posts
-      </Link>
+      <footer class='py-2 absolute bottom-0 left-0 flex justify-end w-full max-w-[99%]'>
+        <LiveViewers />
+      </footer>
     </main>
   )
 }

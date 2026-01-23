@@ -1,6 +1,6 @@
-@import url("https://esm.sh/@shikijs/twoslash/style-rich.css");
-@import "#style/tw.css";
-@plugin "@tailwindcss/typography";
+@import url('https://esm.sh/@shikijs/twoslash/style-rich.css');
+@import '#style/tw.css';
+@plugin '@tailwindcss/typography';
 
 h1 {
   /* margin-bottom: 1.5rem; */
@@ -38,7 +38,7 @@ li {
   margin: 0.25rem 0;
 }
 
-a:not([data-element="post-heading"]) {
+a:not([data-element='post-heading']) {
   color: #549ff5;
   text-decoration: none;
   font-weight: 550;
@@ -96,7 +96,7 @@ h5 {
   max-width: fit-content;
 }
 
-a[data-element="post-heading"] {
+a[data-element='post-heading'] {
   text-decoration: none;
   font-weight: 750;
   font-style: normal;
@@ -113,16 +113,16 @@ h3,
 h4,
 h5,
 h6 {
-  [data-element="post-heading"] {
+  [data-element='post-heading'] {
     &::before {
-      content: "# ";
+      content: '# ';
       margin-left: -0.75rem;
       color: #ffc8fb00;
       transition: color 0.2s ease-in-out;
     }
   }
   &:hover {
-    [data-element="post-heading"] {
+    [data-element='post-heading'] {
       &::before {
         color: #ffc8fb;
         transition: color 0.2s ease-in-out;

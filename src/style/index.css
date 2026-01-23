@@ -1,26 +1,35 @@
-@import "#style/tw.css";
+@import '#style/tw.css';
 
 @font-face {
-  font-family: "Lilex";
-  src: url("/fonts/Lilex.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
+  font-family: 'Lilex Fallback';
+  src: local('SF Mono'), local('Monaco'), local('Menlo'), local('Consolas'), local('monospace');
+  ascent-override: 100%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
 }
 
 @font-face {
-  font-family: "Lilex";
-  src: url("/fonts/Lilex-Italic.woff2") format("woff2");
+  font-family: 'Lilex';
+  src: url('/fonts/Lilex.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: 'Lilex';
+  src: url('/fonts/Lilex-Italic.woff2') format('woff2');
   font-weight: 100 900;
   font-style: italic;
-  font-display: swap;
+  font-display: optional;
 }
 
 @theme {
-  --font-display: "Lilex", "sans-serif";
+  --font-display: 'Lilex', 'Lilex Fallback', sans-serif;
 }
 
-@custom-variant data-checked (&[data-ui~="checked"]);
+@custom-variant data-checked (&[data-ui~='checked']);
 
 @custom-variant dark {
   @media (prefers-color-scheme: dark) {
@@ -53,6 +62,19 @@ html,
   touch-action: manipulation;
 }
 
+html,
+body {
+  cursor: url('/icons/cursor.png'), auto;
+  min-height: 100vh;
+  width: 100%;
+}
+
+*,
+*::before,
+*::after {
+  cursor: inherit;
+}
+
 @layer base {
   html {
     color-scheme: light dark;
@@ -76,12 +98,12 @@ button:focus-visible {
   border-radius: 2px;
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   @apply appearance-none;
 }
 
-input[type="number"] {
+input[type='number'] {
   appearance: textfield;
 }
 
