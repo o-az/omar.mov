@@ -17,7 +17,7 @@ function RouteComponent() {
   return (
     <For each={allPosts.filter(item => !item.draft)}>
       {item => (
-        <div class='py-2'>
+        <div class='py-2 cursor-pointer'>
           <Link
             preload='render'
             to={'/posts/$id'}

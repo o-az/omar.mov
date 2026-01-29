@@ -232,4 +232,21 @@ export class AgentFsBashFileSystem {
     const agentPath = this.#toAgentPath(pathName)
     return this.#agentFileSystem.readlink(agentPath)
   }
+
+  async realpath(pathName: string): Promise<string> {
+    const normalized = this.normalizePath(pathName)
+    const stats = await this.lstat(normalized)
+    if (stats.isSymbolicLink) {
+      const target = await this.readlink(normalized)
+      const resolvedTarget = target.startsWith('/')
+        ? target
+        : this.resolvePath(normalized.split('/').slice(0, -1).join('/') || '/', target)
+      return this.realpath(resolvedTarget)
+    }
+    return normalized
+  }
+
+  async utimes(_pathName: string, _atime: Date, _mtime: Date) {
+    // AgentFS does not support utimes. Ignore to match just-bash expectations.
+  }
 }

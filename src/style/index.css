@@ -27,6 +27,7 @@
 
 @theme {
   --font-display: 'Lilex', 'Lilex Fallback', sans-serif;
+  --cursor-image: url('/icons/cursor.png'), auto;
 }
 
 @custom-variant data-checked (&[data-ui~='checked']);
@@ -69,11 +70,11 @@ body {
   width: 100%;
 }
 
-*,
+/* *,
 *::before,
 *::after {
   cursor: inherit;
-}
+} */
 
 @layer base {
   html {

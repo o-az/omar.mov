@@ -5,6 +5,7 @@ import { HydrationScript } from 'solid-js/web'
 import { Outlet, Scripts, HeadContent, createRootRoute } from '@tanstack/solid-router'
 
 import appCss from '#style/index.css?url'
+import { LiveViewers } from '#components/live-viewers.tsx'
 import { DevTools, useDevTools } from '#components/dev-tools.tsx'
 import { DefaultCatchBoundary } from '#components/default-catch-boundary.tsx'
 
@@ -107,6 +108,9 @@ function RootDocument({ children }: { children: Solid.JSX.Element }) {
         {children}
         <DevTools />
         <Scripts />
+        <footer class='py-2 absolute bottom-0 left-0 flex justify-end w-full max-w-[99%] cursor-image'>
+          <LiveViewers />
+        </footer>
       </body>
     </html>
   )

@@ -2,8 +2,6 @@ import { For, onMount } from 'solid-js'
 import { PowerGlitch } from 'powerglitch'
 import { createFileRoute, Link } from '@tanstack/solid-router'
 
-import { LiveViewers } from '#components/live-viewers.tsx'
-
 export const Route = createFileRoute('/')({
   ssr: true,
   component: RouteComponent
@@ -40,7 +38,7 @@ function RouteComponent() {
     <main class='size-full font-display'>
       <Link
         to='/posts'
-        class='text-transparent hover:text-yellow-300 absolute top-0 right-0 p-2 opacity-5 hover:opacity-100'>
+        class='text-transparent hover:text-yellow-300 absolute top-0 right-0 p-2 opacity-75 hover:opacity-100'>
         posts
       </Link>
       <header class='flex items-center justify-between'>
@@ -94,9 +92,6 @@ function RouteComponent() {
           </li>
         </ul>
       </nav>
-      <footer class='py-2 absolute bottom-0 left-0 flex justify-end w-full max-w-[99%]'>
-        <LiveViewers />
-      </footer>
     </main>
   )
 }

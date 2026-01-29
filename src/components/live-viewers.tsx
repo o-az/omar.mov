@@ -14,32 +14,32 @@ export function LiveViewers() {
   const [socket, setSocket] = createSignal<PartySocketType | null>(null)
   const [viewerCount, setViewerCount] = createSignal<number | null>(null)
 
-  onMount(async () => {
+  onMount(() => {
     setMounted(true)
-    const { PartySocket } = await import('partysocket')
+    import('partysocket').then(({ PartySocket }) => {
+      const partySocket = new PartySocket({
+        room: 'global',
+        party: 'live-viewers-do',
+        host: window.location.host
+      })
 
-    const partySocket = new PartySocket({
-      room: 'global',
-      party: 'live-viewers-do',
-      host: window.location.host
+      function listener(event: MessageEvent) {
+        const result = z.safeParse(
+          z.object({ type: z.string(), count: z.number() }),
+          JSON.parse(event.data)
+        )
+        if (!result.success) return
+        if (result.data.type === 'viewer-count') setViewerCount(result.data.count)
+      }
+
+      partySocket.addEventListener('message', listener)
+      setSocket(partySocket)
     })
+  })
 
-    function listener(event: MessageEvent) {
-      const result = z.safeParse(
-        z.object({ type: z.string(), count: z.number() }),
-        JSON.parse(event.data)
-      )
-      if (!result.success) return
-      if (result.data.type === 'viewer-count') setViewerCount(result.data.count)
-    }
-
-    partySocket.addEventListener('message', listener)
-
-    setSocket(partySocket)
-    onCleanup(() => {
-      partySocket.close()
-      partySocket.removeEventListener('message', listener)
-    })
+  onCleanup(() => {
+    const currentSocket = socket()
+    if (currentSocket) currentSocket.close()
   })
 
   createEffect(
@@ -65,8 +65,8 @@ export function LiveViewers() {
     <Show when={mounted()}>
       <div
         title={`${Number(viewerCount() ?? 0) > 1 ? `${viewerCount()} users` : `${viewerCount()} user`} currently on this page`}
-        class='max-w-min flex items-center justify-end gap-1 text-xs text-white opacity-55 hover:opacity-100 py-py'>
-        <p class='relative flex size-1.5 shrink-0'>
+        class='max-w-min flex items-center justify-end gap-1 text-sm text-white opacity-65 hover:opacity-100 py-py cursor-default'>
+        <p class='relative flex size-2 shrink-0'>
           <span
             class={cx('absolute inline-flex size-full rounded-full', {
               'bg-transparent': !showLive(),
@@ -74,13 +74,13 @@ export function LiveViewers() {
             })}
           />
           <span
-            class={cx('relative inline-flex size-1.5 rounded-full', {
+            class={cx('relative inline-flex size-2 rounded-full', {
               'bg-emerald-400': showLive(),
               'bg-neutral-400': !showLive()
             })}
           />
         </p>
-        <span class='min-w-[3ch] tabular-nums text-[9px]'>{viewerCount() ?? '0'}</span>
+        <span class='min-w-[3ch] tabular-nums text-[11px]'>{viewerCount() ?? '0'}</span>
       </div>
     </Show>
   )
