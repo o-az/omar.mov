@@ -1,0 +1,45 @@
+{
+  "$schema": "https://esm.sh/wrangler/config-schema.json",
+  "name": "omar-mov",
+  "compatibility_date": "2026-01-20",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "main": "dist/_worker.js/index.js",
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist"
+  },
+  "keep_vars": true,
+  "workers_dev": true,
+  "preview_urls": true,
+  "ai": {
+    "binding": "AI"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "LIVE_VIEWERS_DO",
+        "class_name": "LiveViewersDO"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": [
+        "LiveViewersDO"
+      ]
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "persist": true,
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true
+    }
+  }
+}

@@ -1,0 +1,90 @@
+---
+import '../styles/index.css'
+import { LiveViewers } from '../components/live-viewers.tsx'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const { title = 'omar.mov', description = "how to reach me and see what I'm up to" } = Astro.props
+---
+
+<html lang='en' class='min-h-screen'>
+  <head>
+    <meta charset='utf-8' />
+    <meta
+      name='viewport'
+      content='width=device-width, initial-scale=1.0, interactive-widget=resizes-content'
+    />
+    <meta name='robots' content='index, follow' />
+    <meta name='description' content={description} />
+    <meta name='keywords' content='o-az, amorfati, site, blog, dev' />
+    <meta name='generator' content={Astro.generator} />
+    <link rel='preload' href='/fonts/Lilex.woff2' as='font' type='font/woff2' crossorigin />
+    <link rel='preload' href='/fonts/Lilex-Italic.woff2' as='font' type='font/woff2' crossorigin />
+    <link
+      rel='icon'
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌩️</text></svg>"
+    />
+    <title>{title}</title>
+    <script
+      is:inline
+      type='application/ld+json'
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'omar.mov',
+        url: 'https://omar.mov',
+        publisher: {
+          '@type': 'Organization',
+          name: 'omar.mov',
+          url: 'https://omar.mov',
+          logo: 'https://omar.mov/logo.png',
+          sameAs: ['https://twitter.com/omaraz', 'https://github.com/o-az']
+        }
+      })}
+    />
+    <script is:inline>
+      if (typeof globalThis.process === 'undefined') {
+        globalThis.process = {
+          env: {},
+          platform: 'browser',
+          version: 'v0.0.0',
+          versions: {},
+          stdout: { write: function() {} },
+          stderr: { write: function() {} },
+          cwd: function() { return '/' },
+          exit: function() {},
+          argv: [],
+          pid: 0
+        }
+      }
+    </script>
+    <slot name='head' />
+    <style>
+      .fonts-loading {
+        opacity: 0;
+      }
+      .fonts-loaded {
+        opacity: 1;
+        transition: opacity 0.1s;
+      }
+    </style>
+  </head>
+  <body
+    class='size-full bg-[#121212] p-4 text-white selection:bg-fuchsia-300 selection:text-black flex min-h-screen flex-col'
+  >
+    <slot />
+    <footer class='py-2 absolute bottom-0 left-0 flex justify-end w-full max-w-[99%] cursor-image'>
+      <LiveViewers client:idle />
+    </footer>
+    <script>
+      document.documentElement.classList.add('fonts-loading')
+      document.fonts.ready.then(() => {
+        document.documentElement.classList.remove('fonts-loading')
+        document.documentElement.classList.add('fonts-loaded')
+      })
+    </script>
+  </body>
+</html>

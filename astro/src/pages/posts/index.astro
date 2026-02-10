@@ -1,0 +1,34 @@
+---
+import '../../styles/markdown.css'
+import { getCollection } from 'astro:content'
+
+import Layout from '../../layouts/Layout.astro'
+import { getPostSlug } from '../../lib/posts'
+
+const posts = (await getCollection('posts', post => !post.data.draft)).sort(
+  (left, right) => right.data.date.getTime() - left.data.date.getTime()
+)
+---
+
+<Layout title="Posts | omar.mov" description="Writing and notes by omar aziz">
+  <Fragment slot="head">
+    <link rel="stylesheet" href="https://esm.sh/katex/dist/katex.min.css">
+  </Fragment>
+  <main>
+    {posts.map(post => (
+        <div class='py-2 cursor-pointer'>
+          <a href={`/posts/${getPostSlug(post.id)}/`}>
+            <span class='text-neutral-500 text-sm mr-2'>
+              {post.data.date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              })}
+            </span>
+            <span>{post.data.title}</span>
+          </a>
+          <p class='text-neutral-400 text-sm mt-1'>{post.data.description}</p>
+        </div>
+      ))}
+  </main>
+</Layout>

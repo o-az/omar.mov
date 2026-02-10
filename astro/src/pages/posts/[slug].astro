@@ -1,0 +1,53 @@
+---
+import '../../styles/markdown.css'
+import { getCollection, render } from 'astro:content'
+
+import Layout from '../../layouts/Layout.astro'
+import { getPostSlug } from '../../lib/posts'
+import { CommentsSection } from '../../components/comments.tsx'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', post => !post.data.draft)
+
+  return posts.map(post => ({
+    params: { slug: getPostSlug(post.id) },
+    props: { post }
+  }))
+}
+
+const { post } = Astro.props
+const { Content } = await render(post)
+const slug = getPostSlug(post.id)
+---
+
+<Layout title={`${post.data.title} | omar.mov`} description={post.data.description}>
+  <Fragment slot='head'>
+    <link rel='canonical' href={`https://omar.mov/posts/${slug}`} />
+    <link rel='stylesheet' href='https://esm.sh/katex/dist/katex.min.css' />
+    <meta name='article:published_time' content={post.data.date.toISOString()} />
+    <script
+      is:inline
+      type='application/ld+json'
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: post.data.title,
+        description: post.data.description,
+        publisher: {
+          '@type': 'Organization',
+          name: 'omar.mov',
+          logo: { '@type': 'ImageObject', url: 'https://omar.mov/logo.png' }
+        },
+        datePublished: post.data.date.toISOString()
+      })}
+    />
+  </Fragment>
+  <main class='min-h-full'>
+    <article
+      class='max-w-170 mx-auto prose dark:prose-invert prose-img:rounded-xl prose-img:my-3 prose-img:py-4 prose-img:mb-6'
+    >
+      <Content />
+    </article>
+    <CommentsSection slug={slug} client:idle />
+  </main>
+</Layout>

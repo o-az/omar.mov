@@ -1,0 +1,27 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "lib": [
+      "ESNext"
+    ],
+    "paths": {
+      "@cloudflare/workers-types": [
+        "./node_modules/@cloudflare/workers-types/index.d.ts"
+      ],
+      "@cloudflare/workers-types/experimental": [
+        "./node_modules/@cloudflare/workers-types/experimental/index.d.ts"
+      ]
+    }
+  },
+  "files": ["package.json", "wrangler.json", "astro.config.ts", "worker-configuration.d.ts"],
+  "include": [
+    ".astro/types.d.ts",
+    "src/env.d.ts",
+    "src/**/*"
+  ],
+  "exclude": [
+    "dist"
+  ]
+}
