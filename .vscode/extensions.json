@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "biomejs.biome",
+    "npmx-dev.vscode-npmx",
     "unifiedjs.vscode-mdx",
     "tobermory.es6-string-html",
     "bradlc.vscode-tailwindcss",

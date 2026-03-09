@@ -1,4 +1,4 @@
-import { Bash, defineCommand } from 'just-bash'
+import { Bash, defineCommand } from 'just-bash/browser'
 import { createFileRoute } from '@tanstack/solid-router'
 import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
 

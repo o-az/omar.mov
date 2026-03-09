@@ -3,7 +3,7 @@ import * as z from 'zod/mini'
 import rehypeAutolinkHeadings, {
   type Options as RehypeAutolinkHeadingsOptions
 } from 'rehype-autolink-headings'
-import stringWidth from 'string-width'
+import stringWidth from 'fast-string-width'
 import { compileMarkdown } from '@content-collections/markdown'
 import { transformerNotationHighlight } from '@shikijs/transformers'
 import { transformerTwoslash, rendererRich } from '@shikijs/twoslash'
@@ -67,5 +67,5 @@ const posts = defineCollection({
 })
 
 export default defineConfig({
-  collections: [posts]
+  content: [posts]
 })

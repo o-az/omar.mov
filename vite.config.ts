@@ -76,6 +76,9 @@ export default defineConfig(config => {
 
   const allowedHosts = config.mode === 'development' ? (env?.ALLOWED_HOSTS?.split(',') ?? []) : []
   return {
+    optimizeDeps: {
+      exclude: ['bash-tool', 'just-bash']
+    },
     resolve: {
       alias: {
         '#': NodePath.resolve(import.meta.dirname, 'src')

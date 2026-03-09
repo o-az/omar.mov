@@ -31,9 +31,20 @@
   "hidden_files": [
     "**/.wrangler",
     "**/.tanstack",
-    "**/.claude"
+    "**/.claude",
+    "**/astro",
+    "**/.crush",
+    "**/.localflare",
+    "**/.claude",
+    "**/.superset"
   ],
   "file_scan_exclusions": [
+    "**/.claude",
+    "**/astro",
+    "**/.crush",
+    "**/.localflare",
+    "**/.superset",
+    ".DS_Store",
     "**/.wrangler",
     "**/.tanstack",
     "**/.vscode",

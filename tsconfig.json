@@ -5,6 +5,9 @@
     "paths": {
       "#*": [
         "./src/*"
+      ],
+      "#content-collections": [
+        "./.content-collections/generated"
       ]
     },
     "noEmit": true,
@@ -39,6 +42,7 @@
       "bun",
       "node",
       "vite/client",
+      "@cloudflare/workers-types",
       "typed-query-selector/strict"
     ]
   },

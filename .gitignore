@@ -37,3 +37,5 @@ _
 # opensrc - source code for packages
 opensrc/
 .content-collections
+
+.superset
