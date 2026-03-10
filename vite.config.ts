@@ -34,7 +34,8 @@ export default defineConfig(config => {
 
   const plugins: Array<PluginOption> = [
     VitePluginCloudflare({
-      viteEnvironment: { name: 'ssr' }
+      viteEnvironment: { name: 'ssr' },
+      remoteBindings: false
     }),
     VitePluginDevtoolsJson(),
     VitePluginTanstackDevtools({

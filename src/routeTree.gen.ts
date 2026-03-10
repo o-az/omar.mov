@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PostsIndexRouteImport } from './routes/posts/index'
 import { Route as PostsChar123slugChar125DotmdRouteImport } from './routes/posts/{$slug}[.]md'
 import { Route as PostsIdRouteImport } from './routes/posts/$id'
+import { Route as ApiPingRouteImport } from './routes/api/ping'
 import { Route as ApiCliProxyRouteImport } from './routes/api/cli-proxy'
 import { Route as ApiAgentXRouteImport } from './routes/api/agent/$x'
 
@@ -49,6 +50,11 @@ const PostsIdRoute = PostsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => PostsRouteRoute,
 } as any)
+const ApiPingRoute = ApiPingRouteImport.update({
+  id: '/api/ping',
+  path: '/api/ping',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiCliProxyRoute = ApiCliProxyRouteImport.update({
   id: '/api/cli-proxy',
   path: '/api/cli-proxy',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/cli': typeof CliRouteRoute
   '/posts': typeof PostsRouteRouteWithChildren
   '/api/cli-proxy': typeof ApiCliProxyRoute
+  '/api/ping': typeof ApiPingRoute
   '/posts/$id': typeof PostsIdRoute
   '/posts/{$slug}.md': typeof PostsChar123slugChar125DotmdRoute
   '/posts/': typeof PostsIndexRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cli': typeof CliRouteRoute
   '/api/cli-proxy': typeof ApiCliProxyRoute
+  '/api/ping': typeof ApiPingRoute
   '/posts/$id': typeof PostsIdRoute
   '/posts/{$slug}.md': typeof PostsChar123slugChar125DotmdRoute
   '/posts': typeof PostsIndexRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/cli': typeof CliRouteRoute
   '/posts': typeof PostsRouteRouteWithChildren
   '/api/cli-proxy': typeof ApiCliProxyRoute
+  '/api/ping': typeof ApiPingRoute
   '/posts/$id': typeof PostsIdRoute
   '/posts/{$slug}.md': typeof PostsChar123slugChar125DotmdRoute
   '/posts/': typeof PostsIndexRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/cli'
     | '/posts'
     | '/api/cli-proxy'
+    | '/api/ping'
     | '/posts/$id'
     | '/posts/{$slug}.md'
     | '/posts/'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/cli'
     | '/api/cli-proxy'
+    | '/api/ping'
     | '/posts/$id'
     | '/posts/{$slug}.md'
     | '/posts'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/cli'
     | '/posts'
     | '/api/cli-proxy'
+    | '/api/ping'
     | '/posts/$id'
     | '/posts/{$slug}.md'
     | '/posts/'
@@ -127,6 +139,7 @@ export interface RootRouteChildren {
   CliRouteRoute: typeof CliRouteRoute
   PostsRouteRoute: typeof PostsRouteRouteWithChildren
   ApiCliProxyRoute: typeof ApiCliProxyRoute
+  ApiPingRoute: typeof ApiPingRoute
   ApiAgentXRoute: typeof ApiAgentXRoute
 }
 
@@ -174,6 +187,13 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof PostsIdRouteImport
       parentRoute: typeof PostsRouteRoute
     }
+    '/api/ping': {
+      id: '/api/ping'
+      path: '/api/ping'
+      fullPath: '/api/ping'
+      preLoaderRoute: typeof ApiPingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/cli-proxy': {
       id: '/api/cli-proxy'
       path: '/api/cli-proxy'
@@ -212,6 +232,7 @@ const rootRouteChildren: RootRouteChildren = {
   CliRouteRoute: CliRouteRoute,
   PostsRouteRoute: PostsRouteRouteWithChildren,
   ApiCliProxyRoute: ApiCliProxyRoute,
+  ApiPingRoute: ApiPingRoute,
   ApiAgentXRoute: ApiAgentXRoute,
 }
 export const routeTree = rootRouteImport
