@@ -16,10 +16,7 @@ import { tanstackStart as VitePluginTanstackStart } from '@tanstack/solid-start/
 
 import { esmExternalRequirePlugin } from 'rolldown/plugins'
 
-const enabledSchema = z.stringbool({
-  truthy: ['true', '1', 'yes', 'on', 'y', 'enabled'],
-  falsy: ['false', '0', 'no', 'off', 'n', 'disabled']
-})
+const enabledSchema = z.stringbool()
 
 const devFlagsSchema = z.object({
   VITE_ENABLE_INSPECT: z.prefault(enabledSchema, 'false'),
@@ -53,9 +50,9 @@ export default defineConfig(config => {
     }),
     VitePluginTailwindCSS(),
     VitePluginTanstackStart({
-      start: { entry: './src/start.ts' },
-      server: { entry: './src/server.ts' },
-      client: { entry: './src/client.ts' }
+      start: { entry: './src/index.start.ts' },
+      server: { entry: './src/index.server.ts' },
+      client: { entry: './src/index.client.tsx' }
     }),
     VitePluginSolid({ ssr: true })
   ]
@@ -78,9 +75,10 @@ export default defineConfig(config => {
   const allowedHosts = config.mode === 'development' ? (env?.ALLOWED_HOSTS?.split(',') ?? []) : []
   return {
     optimizeDeps: {
-      exclude: ['bash-tool', 'just-bash']
+      exclude: ['bash-tool', 'just-bash', '@tanstack/solid-start']
     },
     resolve: {
+      tsconfigPaths: true,
       alias: {
         '#': NodePath.resolve(import.meta.dirname, 'src')
       }
