@@ -3,7 +3,7 @@
 // Runtime types generated with workerd@1.20260301.1 2026-01-20 nodejs_compat
 declare namespace Cloudflare {
 	interface GlobalProps {
-		mainModule: typeof import("./src/server");
+		mainModule: typeof import("./src/index.server");
 		durableNamespaces: "AgentDO" | "LiveViewersDO";
 	}
 	interface Env {
@@ -31,8 +31,8 @@ declare namespace Cloudflare {
 		VITE_ENABLE_CLOUDFLARE_TUNNEL: string;
 		ALLOWED_HOSTS: string;
 		AGENT_DO_KEY: string;
-		AGENT_DO: DurableObjectNamespace<import("./src/server").AgentDO>;
-		LIVE_VIEWERS_DO: DurableObjectNamespace<import("./src/server").LiveViewersDO>;
+		AGENT_DO: DurableObjectNamespace<import("./src/index.server").AgentDO>;
+		LIVE_VIEWERS_DO: DurableObjectNamespace<import("./src/index.server").LiveViewersDO>;
 	}
 }
 interface CloudflareBindings extends Cloudflare.Env {}
