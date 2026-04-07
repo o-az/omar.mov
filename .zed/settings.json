@@ -9,7 +9,8 @@
           "class",
           "tw\\.[a-z-]+",
           "cn",
-          "clsx"
+          "clsx",
+          "classList"
         ],
         "experimental": {
           "classRegex": [

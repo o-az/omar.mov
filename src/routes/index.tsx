@@ -2,6 +2,8 @@ import { For, onMount } from 'solid-js'
 import { PowerGlitch } from 'powerglitch'
 import { createFileRoute, Link } from '@tanstack/solid-router'
 
+import { cx } from '#lib/style.ts'
+
 export const Route = createFileRoute('/')({
   ssr: true,
   component: RouteComponent
@@ -36,11 +38,15 @@ function RouteComponent() {
 
   return (
     <main class='size-full font-display'>
-      <Link
-        to='/posts'
-        class='text-transparent hover:text-yellow-300 absolute top-0 right-0 p-2 opacity-75 hover:opacity-100'>
-        posts
-      </Link>
+      <ul
+        class={cx([
+          'flex flex-col absolute top-0 right-0 pr-3 gap-1 opacity-75 hover:opacity-100 list-none!',
+          '*:text-transparent *:hover:text-yellow-300'
+        ])}>
+        <li>
+          <Link to='/posts'>posts</Link>
+        </li>
+      </ul>
       <header class='flex items-center justify-between'>
         <h1 class='text-3xl font-bold leading-tight'>omar aziz</h1>
       </header>
