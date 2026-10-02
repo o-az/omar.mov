@@ -36,11 +36,8 @@ export const Route = createFileRoute('/posts/$id')({
             '@type': 'Article',
             headline: frontmatter?.title,
             description: frontmatter?.description,
-            publisher: {
-              '@type': 'Organization',
-              name: 'omar.mov',
-              logo: { '@type': 'ImageObject', url: 'https://omar.mov/logo.png' }
-            },
+            author: { '@type': 'Person', '@id': 'https://omar.mov/#person', name: 'Omar Aziz' },
+            publisher: { '@type': 'Person', '@id': 'https://omar.mov/#person', name: 'Omar Aziz' },
             datePublished: frontmatter?.date
           })
         }
