@@ -50,16 +50,28 @@ export const Route = createRootRoute({
         type: 'application/ld+json',
         children: JSON.stringify({
           '@context': 'https://schema.org',
-          '@type': 'WebSite',
-          name: 'omar.mov',
-          url: 'https://omar.mov',
-          publisher: {
-            '@type': 'Organization',
-            name: 'omar.mov',
-            url: 'https://omar.mov',
-            logo: 'https://omar.mov/logo.png',
-            sameAs: ['https://twitter.com/omaraz', 'https://github.com/o-az']
-          }
+          '@graph': [
+            {
+              '@type': 'WebSite',
+              '@id': 'https://omar.mov/#website',
+              name: 'omar.mov',
+              url: 'https://omar.mov',
+              publisher: { '@id': 'https://omar.mov/#person' }
+            },
+            {
+              '@type': 'Person',
+              '@id': 'https://omar.mov/#person',
+              name: 'Omar Aziz',
+              alternateName: 'Omar Bin Salamah',
+              url: 'https://omar.mov',
+              sameAs: [
+                'https://github.com/o-az',
+                'https://x.com/amorfati',
+                'https://bsky.app/profile/omar.mov',
+                'https://twitter.com/omaraz'
+              ]
+            }
+          ]
         })
       }
     ]
